@@ -7,6 +7,10 @@
     "soliditycoverage": {
       "address": "0x7c2C195CD6D34B8F845992d380aADB2730bB9C6F",
       "deployer": "0xc783df8a850f42e7F7e57013759C285caa701eB6"
+    },
+    "localhost": {
+      "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
     }
   },
   "LendingPoolMock": {
@@ -49,6 +53,10 @@
     "kovan": {
       "address": "0x37cd4b1Af0DB9B49326FbFf8df1EB4193fE72C2b",
       "deployer": "0x85e4A467343c0dc4aDAB74Af84448D9c45D8ae6F"
+    },
+    "localhost": {
+      "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
     }
   },
   "DistributionManager": {
@@ -95,6 +103,10 @@
     "soliditycoverage": {
       "address": "0xD6C850aeBFDC46D7F4c207e445cC0d6B0919BDBe",
       "deployer": "0xc783df8a850f42e7F7e57013759C285caa701eB6"
+    },
+    "localhost": {
+      "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
     }
   },
   "StakedAave": {
@@ -107,6 +119,10 @@
     "kovan": {
       "address": "0x37cd4b1Af0DB9B49326FbFf8df1EB4193fE72C2b",
       "deployer": "0x85e4A467343c0dc4aDAB74Af84448D9c45D8ae6F"
+    },
+    "localhost": {
+      "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
     }
   },
   "MockTransferHook": {
@@ -117,6 +133,10 @@
     "soliditycoverage": {
       "address": "0x3619DbE27d7c1e7E91aA738697Ae7Bc5FC3eACA5",
       "deployer": "0xc783df8a850f42e7F7e57013759C285caa701eB6"
+    },
+    "localhost": {
+      "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
     }
   },
   "ATokenMock-aDai": {
@@ -127,6 +147,10 @@
     "soliditycoverage": {
       "address": "0x500D1d6A4c7D8Ae28240b47c8FCde034D827fD5e",
       "deployer": "0xc783df8a850f42e7F7e57013759C285caa701eB6"
+    },
+    "localhost": {
+      "address": "0xE3011A37A904aB90C8881a99BD1F6E21401f1522",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
     }
   },
   "ATokenMock-aWeth": {
@@ -137,6 +161,10 @@
     "soliditycoverage": {
       "address": "0xc4905364b78a742ccce7B890A89514061E47068D",
       "deployer": "0xc783df8a850f42e7F7e57013759C285caa701eB6"
+    },
+    "localhost": {
+      "address": "0x1f10F3Ba7ACB61b2F50B9d6DdCf91a6f787C0E82",
+      "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
     }
   },
   "StakedAaveImpl": {
