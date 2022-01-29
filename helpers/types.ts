@@ -9,7 +9,7 @@ export enum eEthereumNetwork {
 }
 
 export enum eContractid {
-  DistributionManager = 'DistributionManager',
+  AaveDistributionManager = 'AaveDistributionManager',
   StakedAave = 'StakedAave',
   StakedAaveImpl = 'StakedAaveImpl',
   AaveIncentivesController = 'AaveIncentivesController',
