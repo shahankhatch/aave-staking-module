@@ -83,6 +83,7 @@
   ],
   "license": "AGPLv3",
   "dependencies": {
+    "hardhat": "^2.8.3",
     "tmp-promise": "^3.0.2"
   }
 }
