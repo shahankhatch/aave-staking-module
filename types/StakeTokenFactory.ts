@@ -5,7 +5,7 @@ import {Signer, BigNumberish} from 'ethers';
 import {Provider, TransactionRequest} from '@ethersproject/providers';
 import {Contract, ContractFactory, Overrides} from '@ethersproject/contracts';
 
-import {StakeToken} from './StakeToken';
+import {StakedToken} from './StakedToken';
 
 export class StakeTokenFactory extends ContractFactory {
   constructor(signer?: Signer) {
@@ -21,7 +21,7 @@ export class StakeTokenFactory extends ContractFactory {
     emissionManager: string,
     distributionDuration: BigNumberish,
     overrides?: Overrides
-  ): Promise<StakeToken> {
+  ): Promise<StakedToken> {
     return super.deploy(
       stakedToken,
       rewardToken,
@@ -31,7 +31,7 @@ export class StakeTokenFactory extends ContractFactory {
       emissionManager,
       distributionDuration,
       overrides || {}
-    ) as Promise<StakeToken>;
+    ) as Promise<StakedToken>;
   }
   getDeployTransaction(
     stakedToken: string,
@@ -54,14 +54,14 @@ export class StakeTokenFactory extends ContractFactory {
       overrides || {}
     );
   }
-  attach(address: string): StakeToken {
-    return super.attach(address) as StakeToken;
+  attach(address: string): StakedToken {
+    return super.attach(address) as StakedToken;
   }
   connect(signer: Signer): StakeTokenFactory {
     return super.connect(signer) as StakeTokenFactory;
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): StakeToken {
-    return new Contract(address, _abi, signerOrProvider) as StakeToken;
+  static connect(address: string, signerOrProvider: Signer | Provider): StakedToken {
+    return new Contract(address, _abi, signerOrProvider) as StakedToken;
   }
 }
 
