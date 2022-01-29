@@ -55,22 +55,22 @@ const config = {
   typechain: {
     outDir: 'types',
     target: 'ethers-v4',
-  },
-  etherscan: {
-    apiKey: ETHERSCAN_KEY,
-  },
-  defaultNetwork: 'buidlerevm',
-  mocha: {
-    timeout: 0,
-  },
-  networks: {
-    kovan: getCommonNetworkConfig(eEthereumNetwork.kovan, 42),
-    ropsten: getCommonNetworkConfig(eEthereumNetwork.ropsten, 3),
-    main: getCommonNetworkConfig(eEthereumNetwork.main, 1),
-    buidlerevm: {
-      hardfork: 'istanbul',
-      blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
-      gas: DEFAULT_BLOCK_GAS_LIMIT,
+    },
+    etherscan: {
+        apiKey: ETHERSCAN_KEY,
+    },
+    defaultNetwork: 'buidlerevm',
+    mocha: {
+        timeout: 0,
+    },
+    networks: {
+        kovan: getCommonNetworkConfig(eEthereumNetwork.kovan, 42),
+        ropsten: getCommonNetworkConfig(eEthereumNetwork.ropsten, 3),
+        main: getCommonNetworkConfig(eEthereumNetwork.main, 1),
+        buidlerevm: {
+            hardfork: 'istanbul',
+            blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
+            gas: 2000000,
             gasPrice: DEFAULT_GAS_PRICE,
             chainId: BUIDLEREVM_CHAIN_ID,
             throwOnTransactionFailures: true,
