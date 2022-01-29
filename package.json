@@ -10,7 +10,7 @@
     "buidler-main": "buidler --network main",
     "buidler help": "buidler help",
     "compile": "buidler compile",
-    "types-gen": "typechain --target ethers-v5 --outDir ./types './artifacts/*.json'",
+    "types-gen": "rm -rf ./artifacts/**/*.dbg.json && typechain --target ethers-v5 --outDir ./types './artifacts/contracts/**/*.json'",
     "test": "buidler test",
     "test-pei": "npm run test test/__setup.spec.ts test/AaveIncentivesController/*.spec.ts",
     "test-psi": "npm run test test/__setup.spec.ts test/StakedAave/stakedAave-basic.spec.ts test/StakedAave/stakedAave-redeem.spec.ts test/StakedAave/stakedAave-transfers.spec.ts",
