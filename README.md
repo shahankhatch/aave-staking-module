@@ -1,3 +1,14 @@
+# Running
+
+## local node at 127.0.0.1:8545
+
+`npx hardhat node`
+`yarn test`
+
+## internal node
+
+Use default 'buidlerevm' network
+
 # Aave Incentives contracts
 
 Sets of smart contracts to enable stake of Aave-related assets and rewards distribution based on them.
