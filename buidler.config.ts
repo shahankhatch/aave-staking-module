@@ -71,28 +71,29 @@ const config = {
       hardfork: 'istanbul',
       blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
       gas: DEFAULT_BLOCK_GAS_LIMIT,
-      gasPrice: DEFAULT_GAS_PRICE,
-      chainId: BUIDLEREVM_CHAIN_ID,
-      throwOnTransactionFailures: true,
-      throwOnCallFailures: true,
-      accounts: accounts.map(({secretKey, balance}: {secretKey: string; balance: string}) => ({
-        privateKey: secretKey,
-        balance,
-      })),
+            gasPrice: DEFAULT_GAS_PRICE,
+            chainId: BUIDLEREVM_CHAIN_ID,
+            throwOnTransactionFailures: true,
+            throwOnCallFailures: true,
+            loggingEnabled: true,
+            accounts: accounts.map(({secretKey, balance}: { secretKey: string; balance: string }) => ({
+                privateKey: secretKey,
+                balance,
+            })),
+        },
+        ganache: {
+            url: 'http://ganache:8545',
+            accounts: {
+                mnemonic: 'fox sight canyon orphan hotel grow hedgehog build bless august weather swarm',
+                path: "m/44'/60'/0'/0",
+                initialIndex: 0,
+                count: 20,
+            },
+        },
+        coverage: {
+            url: 'http://localhost:8555',
+        },
     },
-    ganache: {
-      url: 'http://ganache:8545',
-      accounts: {
-        mnemonic: 'fox sight canyon orphan hotel grow hedgehog build bless august weather swarm',
-        path: "m/44'/60'/0'/0",
-        initialIndex: 0,
-        count: 20,
-      },
-    },
-    coverage: {
-      url: 'http://localhost:8555',
-    },
-  },
 };
 
 export default config;
