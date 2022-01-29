@@ -5,7 +5,7 @@ import {Signer, BigNumberish} from 'ethers';
 import {Provider, TransactionRequest} from '@ethersproject/providers';
 import {Contract, ContractFactory, Overrides} from '@ethersproject/contracts';
 
-import {BorrowDistribution} from './BorrowDistribution';
+import {BaseDistribution} from './BaseDistribution';
 
 export class BorrowDistributionFactory extends ContractFactory {
   constructor(signer?: Signer) {
@@ -17,9 +17,9 @@ export class BorrowDistributionFactory extends ContractFactory {
     lendingPool: string,
     distributionEnd: BigNumberish,
     overrides?: Overrides
-  ): Promise<BorrowDistribution> {
+  ): Promise<BaseDistribution> {
     return super.deploy(STAKE_CONTRACT, lendingPool, distributionEnd, overrides || {}) as Promise<
-      BorrowDistribution
+      BaseDistribution
     >;
   }
   getDeployTransaction(
@@ -35,14 +35,14 @@ export class BorrowDistributionFactory extends ContractFactory {
       overrides || {}
     );
   }
-  attach(address: string): BorrowDistribution {
-    return super.attach(address) as BorrowDistribution;
+  attach(address: string): BaseDistribution {
+    return super.attach(address) as BaseDistribution;
   }
   connect(signer: Signer): BorrowDistributionFactory {
     return super.connect(signer) as BorrowDistributionFactory;
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): BorrowDistribution {
-    return new Contract(address, _abi, signerOrProvider) as BorrowDistribution;
+  static connect(address: string, signerOrProvider: Signer | Provider): BaseDistribution {
+    return new Contract(address, _abi, signerOrProvider) as BaseDistribution;
   }
 }
 
