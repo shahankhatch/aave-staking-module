@@ -59,6 +59,7 @@ const config = {
     etherscan: {
         apiKey: ETHERSCAN_KEY,
     },
+    // defaultNetwork: 'localhost',
     defaultNetwork: 'buidlerevm',
     mocha: {
         timeout: 0,
