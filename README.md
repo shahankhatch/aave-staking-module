@@ -3,6 +3,7 @@
 ## local node at 127.0.0.1:8545
 
 `npx hardhat node`
+`yarn buidler-localhost test`
 `yarn test`
 
 ## internal node
