@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -51,20 +50,16 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var make_suite_1 = require("../helpers/make-suite");
-var constants_1 = require("../../helpers/constants");
-var misc_utils_1 = require("../../helpers/misc-utils");
-var ethers_1 = require("ethers");
-var bignumber_js_1 = __importDefault(require("bignumber.js"));
-var reward_1 = require("./data-helpers/reward");
-var asset_user_data_1 = require("../DistributionManager/data-helpers/asset-user-data");
-var base_math_1 = require("../DistributionManager/data-helpers/base-math");
+import { makeSuite } from '../helpers/make-suite';
+import { COOLDOWN_SECONDS, UNSTAKE_WINDOW, MAX_UINT_AMOUNT, STAKED_AAVE_NAME, STAKED_AAVE_SYMBOL, STAKED_AAVE_DECIMALS, } from '../../helpers/constants';
+import { waitForTx, timeLatest, advanceBlock, increaseTimeAndMine } from '../../helpers/misc-utils';
+import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
+import { compareRewardsAtAction } from './data-helpers/reward';
+import { getUserIndex } from '../DistributionManager/data-helpers/asset-user-data';
+import { getRewards } from '../DistributionManager/data-helpers/base-math';
 var expect = require('chai').expect;
-make_suite_1.makeSuite('StakedAave. Basics', function (testEnv) {
+makeSuite('StakedAave. Basics', function (testEnv) {
     it('Initial configuration after initialize() is correct', function () { return __awaiter(void 0, void 0, void 0, function () {
         var stakedAave, aaveToken, rewardsVault, _a, _b, _c, _d, _e, _f, _g, _h, _j;
         return __generator(this, function (_k) {
@@ -74,15 +69,15 @@ make_suite_1.makeSuite('StakedAave. Basics', function (testEnv) {
                     _a = expect;
                     return [4 /*yield*/, stakedAave.name()];
                 case 1:
-                    _a.apply(void 0, [_k.sent()]).to.be.equal(constants_1.STAKED_AAVE_NAME);
+                    _a.apply(void 0, [_k.sent()]).to.be.equal(STAKED_AAVE_NAME);
                     _b = expect;
                     return [4 /*yield*/, stakedAave.symbol()];
                 case 2:
-                    _b.apply(void 0, [_k.sent()]).to.be.equal(constants_1.STAKED_AAVE_SYMBOL);
+                    _b.apply(void 0, [_k.sent()]).to.be.equal(STAKED_AAVE_SYMBOL);
                     _c = expect;
                     return [4 /*yield*/, stakedAave.decimals()];
                 case 3:
-                    _c.apply(void 0, [_k.sent()]).to.be.equal(constants_1.STAKED_AAVE_DECIMALS);
+                    _c.apply(void 0, [_k.sent()]).to.be.equal(STAKED_AAVE_DECIMALS);
                     _d = expect;
                     return [4 /*yield*/, stakedAave.REVISION()];
                 case 4:
@@ -98,11 +93,11 @@ make_suite_1.makeSuite('StakedAave. Basics', function (testEnv) {
                     _g = expect;
                     return [4 /*yield*/, stakedAave.COOLDOWN_SECONDS()];
                 case 7:
-                    _g.apply(void 0, [(_k.sent()).toString()]).to.be.equal(constants_1.COOLDOWN_SECONDS);
+                    _g.apply(void 0, [(_k.sent()).toString()]).to.be.equal(COOLDOWN_SECONDS);
                     _h = expect;
                     return [4 /*yield*/, stakedAave.UNSTAKE_WINDOW()];
                 case 8:
-                    _h.apply(void 0, [(_k.sent()).toString()]).to.be.equal(constants_1.UNSTAKE_WINDOW);
+                    _h.apply(void 0, [(_k.sent()).toString()]).to.be.equal(UNSTAKE_WINDOW);
                     _j = expect;
                     return [4 /*yield*/, stakedAave.REWARDS_VAULT()];
                 case 9:
@@ -145,17 +140,17 @@ make_suite_1.makeSuite('StakedAave. Basics', function (testEnv) {
             switch (_g.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, _a = __read(testEnv.users, 2), staker = _a[1];
-                    amount = ethers_1.ethers.utils.parseEther('50');
-                    _b = bignumber_js_1.default.bind;
+                    amount = ethers.utils.parseEther('50');
+                    _b = BigNumber.bind;
                     return [4 /*yield*/, stakedAave.balanceOf(staker.address)];
                 case 1:
-                    saveBalanceBefore = new (_b.apply(bignumber_js_1.default, [void 0, (_g.sent()).toString()]))();
+                    saveBalanceBefore = new (_b.apply(BigNumber, [void 0, (_g.sent()).toString()]))();
                     actions = function () { return [
                         aaveToken.connect(staker.signer).approve(stakedAave.address, amount),
                         stakedAave.connect(staker.signer).stake(staker.address, amount),
                     ]; };
                     // Check rewards
-                    return [4 /*yield*/, reward_1.compareRewardsAtAction(stakedAave, staker.address, actions)];
+                    return [4 /*yield*/, compareRewardsAtAction(stakedAave, staker.address, actions)];
                 case 2:
                     // Check rewards
                     _g.sent();
@@ -187,17 +182,17 @@ make_suite_1.makeSuite('StakedAave. Basics', function (testEnv) {
             switch (_e.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, _a = __read(testEnv.users, 2), staker = _a[1];
-                    amount = ethers_1.ethers.utils.parseEther('20');
-                    _b = bignumber_js_1.default.bind;
+                    amount = ethers.utils.parseEther('20');
+                    _b = BigNumber.bind;
                     return [4 /*yield*/, stakedAave.balanceOf(staker.address)];
                 case 1:
-                    saveBalanceBefore = new (_b.apply(bignumber_js_1.default, [void 0, (_e.sent()).toString()]))();
+                    saveBalanceBefore = new (_b.apply(BigNumber, [void 0, (_e.sent()).toString()]))();
                     actions = function () { return [
                         aaveToken.connect(staker.signer).approve(stakedAave.address, amount),
                         stakedAave.connect(staker.signer).stake(staker.address, amount),
                     ]; };
                     // Checks rewards
-                    return [4 /*yield*/, reward_1.compareRewardsAtAction(stakedAave, staker.address, actions, true)];
+                    return [4 /*yield*/, compareRewardsAtAction(stakedAave, staker.address, actions, true)];
                 case 2:
                     // Checks rewards
                     _e.sent();
@@ -222,7 +217,7 @@ make_suite_1.makeSuite('StakedAave. Basics', function (testEnv) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, _a = __read(testEnv.users, 2), staker = _a[1];
                     // Increase time for bigger rewards
-                    return [4 /*yield*/, misc_utils_1.increaseTimeAndMine(1000)];
+                    return [4 /*yield*/, increaseTimeAndMine(1000)];
                 case 1:
                     // Increase time for bigger rewards
                     _b.sent();
@@ -255,7 +250,7 @@ make_suite_1.makeSuite('StakedAave. Basics', function (testEnv) {
                     // Try to claim more amount than accumulated
                     return [4 /*yield*/, expect(stakedAave
                             .connect(staker.signer)
-                            .claimRewards(staker.address, ethers_1.ethers.utils.parseEther('10000'))).to.be.revertedWith('INVALID_AMOUNT')];
+                            .claimRewards(staker.address, ethers.utils.parseEther('10000'))).to.be.revertedWith('INVALID_AMOUNT')];
                 case 2:
                     // Try to claim more amount than accumulated
                     _b.sent();
@@ -284,18 +279,18 @@ make_suite_1.makeSuite('StakedAave. Basics', function (testEnv) {
                     return [4 /*yield*/, stakedAave.stakerRewardsToClaim(userAddress)];
                 case 3:
                     userRewards = _b.sent();
-                    return [4 /*yield*/, asset_user_data_1.getUserIndex(stakedAave, userAddress, underlyingAsset)];
+                    return [4 /*yield*/, getUserIndex(stakedAave, userAddress, underlyingAsset)];
                 case 4:
                     userIndexBefore = _b.sent();
                     // Claim rewards
-                    return [4 /*yield*/, expect(stakedAave.connect(staker.signer).claimRewards(staker.address, constants_1.MAX_UINT_AMOUNT))];
+                    return [4 /*yield*/, expect(stakedAave.connect(staker.signer).claimRewards(staker.address, MAX_UINT_AMOUNT))];
                 case 5:
                     // Claim rewards
                     _b.sent();
-                    return [4 /*yield*/, asset_user_data_1.getUserIndex(stakedAave, userAddress, underlyingAsset)];
+                    return [4 /*yield*/, getUserIndex(stakedAave, userAddress, underlyingAsset)];
                 case 6:
                     userIndexAfter = _b.sent();
-                    expectedAccruedRewards = base_math_1.getRewards(userBalance, userIndexAfter, userIndexBefore).toString();
+                    expectedAccruedRewards = getRewards(userBalance, userIndexAfter, userIndexBefore).toString();
                     return [4 /*yield*/, aaveToken.balanceOf(userAddress)];
                 case 7:
                     userAaveBalanceAfterAction = (_b.sent()).toString();
@@ -310,7 +305,7 @@ make_suite_1.makeSuite('StakedAave. Basics', function (testEnv) {
             switch (_b.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('50');
+                    amount = ethers.utils.parseEther('50');
                     sixStaker = users[5];
                     assetsConfig = {
                         emissionPerSecond: '0',
@@ -320,7 +315,7 @@ make_suite_1.makeSuite('StakedAave. Basics', function (testEnv) {
                         aaveToken.connect(sixStaker.signer).approve(stakedAave.address, amount),
                         stakedAave.connect(sixStaker.signer).stake(sixStaker.address, amount),
                     ]; };
-                    return [4 /*yield*/, reward_1.compareRewardsAtAction(stakedAave, sixStaker.address, actions, false, assetsConfig)];
+                    return [4 /*yield*/, compareRewardsAtAction(stakedAave, sixStaker.address, actions, false, assetsConfig)];
                 case 1:
                     _b.sent();
                     // Check expected stake balance for six staker
@@ -344,13 +339,13 @@ make_suite_1.makeSuite('StakedAave. Basics', function (testEnv) {
             switch (_b.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('30');
+                    amount = ethers.utils.parseEther('30');
                     staker = users[1];
                     sixStaker = users[5];
-                    _a = bignumber_js_1.default.bind;
+                    _a = BigNumber.bind;
                     return [4 /*yield*/, stakedAave.balanceOf(sixStaker.address)];
                 case 1:
-                    saveBalanceBefore = new (_a.apply(bignumber_js_1.default, [void 0, (_b.sent()).toString()]))();
+                    saveBalanceBefore = new (_a.apply(BigNumber, [void 0, (_b.sent()).toString()]))();
                     assetsConfig = {
                         emissionPerSecond: '0',
                         totalStaked: '0',
@@ -359,7 +354,7 @@ make_suite_1.makeSuite('StakedAave. Basics', function (testEnv) {
                         aaveToken.connect(sixStaker.signer).approve(stakedAave.address, amount),
                         stakedAave.connect(sixStaker.signer).stake(sixStaker.address, amount),
                     ]; };
-                    return [4 /*yield*/, reward_1.compareRewardsAtAction(stakedAave, sixStaker.address, actions, false, assetsConfig)];
+                    return [4 /*yield*/, compareRewardsAtAction(stakedAave, sixStaker.address, actions, false, assetsConfig)];
                 case 2:
                     _b.sent();
                     return [4 /*yield*/, stakedAave.getTotalRewardsBalance(sixStaker.address)];
@@ -377,35 +372,35 @@ make_suite_1.makeSuite('StakedAave. Basics', function (testEnv) {
             switch (_e.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, users = testEnv.users;
-                    amount1 = ethers_1.ethers.utils.parseEther('50');
-                    amount2 = ethers_1.ethers.utils.parseEther('20');
+                    amount1 = ethers.utils.parseEther('50');
+                    amount2 = ethers.utils.parseEther('20');
                     staker = users[4];
                     actions = function () { return [
                         aaveToken.connect(staker.signer).approve(stakedAave.address, amount1.add(amount2)),
                         stakedAave.connect(staker.signer).stake(staker.address, amount1),
                     ]; };
-                    return [4 /*yield*/, reward_1.compareRewardsAtAction(stakedAave, staker.address, actions, false)];
+                    return [4 /*yield*/, compareRewardsAtAction(stakedAave, staker.address, actions, false)];
                 case 1:
                     _e.sent();
                     return [4 /*yield*/, stakedAave.connect(staker.signer).cooldown()];
                 case 2:
                     _e.sent();
-                    return [4 /*yield*/, misc_utils_1.timeLatest()];
+                    return [4 /*yield*/, timeLatest()];
                 case 3:
                     cooldownActivationTimestamp = _e.sent();
-                    return [4 /*yield*/, misc_utils_1.advanceBlock(cooldownActivationTimestamp.plus(new bignumber_js_1.default(constants_1.COOLDOWN_SECONDS).plus(1000)).toNumber())];
+                    return [4 /*yield*/, advanceBlock(cooldownActivationTimestamp.plus(new BigNumber(COOLDOWN_SECONDS).plus(1000)).toNumber())];
                 case 4:
                     _e.sent(); // We fast-forward time to just after the unstake window
-                    _a = bignumber_js_1.default.bind;
+                    _a = BigNumber.bind;
                     return [4 /*yield*/, stakedAave.stakersCooldowns(staker.address)];
                 case 5:
-                    stakerCooldownTimestampBefore = new (_a.apply(bignumber_js_1.default, [void 0, (_e.sent()).toString()]))();
-                    _b = misc_utils_1.waitForTx;
+                    stakerCooldownTimestampBefore = new (_a.apply(BigNumber, [void 0, (_e.sent()).toString()]))();
+                    _b = waitForTx;
                     return [4 /*yield*/, stakedAave.connect(staker.signer).stake(staker.address, amount2)];
                 case 6: return [4 /*yield*/, _b.apply(void 0, [_e.sent()])];
                 case 7:
                     _e.sent();
-                    return [4 /*yield*/, misc_utils_1.timeLatest()];
+                    return [4 /*yield*/, timeLatest()];
                 case 8:
                     latestTimestamp = _e.sent();
                     expectedCooldownTimestamp = amount2

@@ -1,15 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.eContractid = exports.eEthereumNetwork = void 0;
-var eEthereumNetwork;
+export var eEthereumNetwork;
 (function (eEthereumNetwork) {
     eEthereumNetwork["coverage"] = "coverage";
     eEthereumNetwork["buidlerevm"] = "buidlerevm";
     eEthereumNetwork["kovan"] = "kovan";
     eEthereumNetwork["ropsten"] = "ropsten";
     eEthereumNetwork["main"] = "main";
-})(eEthereumNetwork = exports.eEthereumNetwork || (exports.eEthereumNetwork = {}));
-var eContractid;
+})(eEthereumNetwork || (eEthereumNetwork = {}));
+export var eContractid;
 (function (eContractid) {
     eContractid["AaveDistributionManager"] = "AaveDistributionManager";
     eContractid["StakedAave"] = "StakedAave";
@@ -22,5 +19,5 @@ var eContractid;
     eContractid["LendingPoolMock"] = "LendingPoolMock";
     eContractid["MockTransferHook"] = "MockTransferHook";
     eContractid["ATokenMock"] = "ATokenMock";
-})(eContractid = exports.eContractid || (exports.eContractid = {}));
+})(eContractid || (eContractid = {}));
 //# sourceMappingURL=types.js.map

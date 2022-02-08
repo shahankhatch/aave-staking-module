@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -62,25 +61,20 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeSuite = exports.initializeMakeSuite = exports.setStakedAaveInitializeTimestamp = exports.stakedAaveInitializeTimestamp = void 0;
-var misc_utils_1 = require("../../helpers/misc-utils");
-var contracts_helpers_1 = require("../../helpers/contracts-helpers");
-var chai_1 = __importDefault(require("chai"));
+import { evmRevert, evmSnapshot, BRE } from '../../helpers/misc-utils';
+import { getEthersSigners } from '../../helpers/contracts-helpers';
+import chai from 'chai';
 // @ts-ignore
-var chai_bignumber_1 = __importDefault(require("chai-bignumber"));
-var contracts_accessors_1 = require("../../helpers/contracts-accessors");
-chai_1.default.use(chai_bignumber_1.default());
-exports.stakedAaveInitializeTimestamp = 0;
-exports.setStakedAaveInitializeTimestamp = function (timestamp) {
-    exports.stakedAaveInitializeTimestamp = timestamp;
+import bignumberChai from 'chai-bignumber';
+import { getAaveIncentivesController, getATokenMock, getMintableErc20, getStakedAave, } from '../../helpers/contracts-accessors';
+chai.use(bignumberChai());
+export var stakedAaveInitializeTimestamp = 0;
+export var setStakedAaveInitializeTimestamp = function (timestamp) {
+    stakedAaveInitializeTimestamp = timestamp;
 };
 var buidlerevmSnapshotId = '0x1';
 var setBuidlerevmSnapshotId = function (id) {
-    if (misc_utils_1.BRE.network.name === 'buidlerevm') {
+    if (BRE.network.name === 'buidlerevm') {
         buidlerevmSnapshotId = id;
     }
 };
@@ -93,13 +87,13 @@ var testEnv = {
     aDaiMock: {},
     aWethMock: {},
 };
-function initializeMakeSuite() {
+export function initializeMakeSuite() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, _deployer, _rewardsVault, restSigners, deployer, _b, rewardsVault, _c, restSigners_1, restSigners_1_1, signer, _d, _e, _f, e_1_1, _g, _h, _j, _k, _l;
         var e_1, _m;
         return __generator(this, function (_o) {
             switch (_o.label) {
-                case 0: return [4 /*yield*/, contracts_helpers_1.getEthersSigners()];
+                case 0: return [4 /*yield*/, getEthersSigners()];
                 case 1:
                     _a = __read.apply(void 0, [_o.sent()]), _deployer = _a[0], _rewardsVault = _a[1], restSigners = _a.slice(2);
                     _b = {};
@@ -149,23 +143,23 @@ function initializeMakeSuite() {
                     testEnv.deployer = deployer;
                     testEnv.rewardsVault = rewardsVault;
                     _g = testEnv;
-                    return [4 /*yield*/, contracts_accessors_1.getStakedAave()];
+                    return [4 /*yield*/, getStakedAave()];
                 case 12:
                     _g.stakedAave = _o.sent();
                     _h = testEnv;
-                    return [4 /*yield*/, contracts_accessors_1.getAaveIncentivesController()];
+                    return [4 /*yield*/, getAaveIncentivesController()];
                 case 13:
                     _h.aaveIncentivesController = _o.sent();
                     _j = testEnv;
-                    return [4 /*yield*/, contracts_accessors_1.getMintableErc20()];
+                    return [4 /*yield*/, getMintableErc20()];
                 case 14:
                     _j.aaveToken = _o.sent();
                     _k = testEnv;
-                    return [4 /*yield*/, contracts_accessors_1.getATokenMock({ slug: 'aDai' })];
+                    return [4 /*yield*/, getATokenMock({ slug: 'aDai' })];
                 case 15:
                     _k.aDaiMock = _o.sent();
                     _l = testEnv;
-                    return [4 /*yield*/, contracts_accessors_1.getATokenMock({ slug: 'aWeth' })];
+                    return [4 /*yield*/, getATokenMock({ slug: 'aWeth' })];
                 case 16:
                     _l.aWethMock = _o.sent();
                     return [2 /*return*/];
@@ -173,8 +167,7 @@ function initializeMakeSuite() {
         });
     });
 }
-exports.initializeMakeSuite = initializeMakeSuite;
-function makeSuite(name, tests) {
+export function makeSuite(name, tests) {
     var _this = this;
     describe(name, function () {
         before(function () { return __awaiter(_this, void 0, void 0, function () {
@@ -183,7 +176,7 @@ function makeSuite(name, tests) {
                 switch (_b.label) {
                     case 0:
                         _a = setBuidlerevmSnapshotId;
-                        return [4 /*yield*/, misc_utils_1.evmSnapshot()];
+                        return [4 /*yield*/, evmSnapshot()];
                     case 1:
                         _a.apply(void 0, [_b.sent()]);
                         return [2 /*return*/];
@@ -194,7 +187,7 @@ function makeSuite(name, tests) {
         after(function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, misc_utils_1.evmRevert(buidlerevmSnapshotId)];
+                    case 0: return [4 /*yield*/, evmRevert(buidlerevmSnapshotId)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -203,5 +196,4 @@ function makeSuite(name, tests) {
         }); });
     });
 }
-exports.makeSuite = makeSuite;
 //# sourceMappingURL=make-suite.js.map

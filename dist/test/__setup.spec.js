@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -62,18 +61,14 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var buidler_1 = __importDefault(require("@nomiclabs/buidler"));
-var ethers_1 = require("ethers");
-var contracts_helpers_1 = require("../helpers/contracts-helpers");
-var make_suite_1 = require("./helpers/make-suite");
-var contracts_accessors_1 = require("../helpers/contracts-accessors");
-var constants_1 = require("../helpers/constants");
-var misc_utils_1 = require("../helpers/misc-utils");
-var types_1 = require("../helpers/types");
+import rawBRE from '@nomiclabs/buidler';
+import { ethers } from 'ethers';
+import { getEthersSigners, insertContractAddressInDb } from '../helpers/contracts-helpers';
+import { initializeMakeSuite } from './helpers/make-suite';
+import { deployAaveIncentivesController, deployStakedAave, deployMintableErc20, deployInitializableAdminUpgradeabilityProxy, deployMockTransferHook, deployATokenMock, } from '../helpers/contracts-accessors';
+import { PSM_STAKER_PREMIUM, COOLDOWN_SECONDS, UNSTAKE_WINDOW, MAX_UINT_AMOUNT, STAKED_AAVE_NAME, STAKED_AAVE_SYMBOL, STAKED_AAVE_DECIMALS, } from '../helpers/constants';
+import { waitForTx } from '../helpers/misc-utils';
+import { eContractid } from '../helpers/types';
 var topUpWalletsWithAave = function (wallets, aaveToken, amount) { return __awaiter(void 0, void 0, void 0, function () {
     var wallets_1, wallets_1_1, wallet, _a, e_1_1;
     var e_1, _b;
@@ -86,7 +81,7 @@ var topUpWalletsWithAave = function (wallets, aaveToken, amount) { return __awai
             case 1:
                 if (!!wallets_1_1.done) return [3 /*break*/, 5];
                 wallet = wallets_1_1.value;
-                _a = misc_utils_1.waitForTx;
+                _a = waitForTx;
                 return [4 /*yield*/, aaveToken.connect(wallet).mint(amount)];
             case 2: return [4 /*yield*/, _a.apply(void 0, [_c.sent()])];
             case 3:
@@ -122,11 +117,11 @@ var buildTestEnv = function (deployer, vaultOfRewards, restWallets) { return __a
                 return [4 /*yield*/, deployer.getAddress()];
             case 2:
                 emissionManager = _d.sent();
-                return [4 /*yield*/, contracts_accessors_1.deployMintableErc20(['Aave', 'aave', 18])];
+                return [4 /*yield*/, deployMintableErc20(['Aave', 'aave', 18])];
             case 3:
                 aaveToken = _d.sent();
-                _a = misc_utils_1.waitForTx;
-                return [4 /*yield*/, aaveToken.connect(vaultOfRewards).mint(ethers_1.ethers.utils.parseEther('1000000'))];
+                _a = waitForTx;
+                return [4 /*yield*/, aaveToken.connect(vaultOfRewards).mint(ethers.utils.parseEther('1000000'))];
             case 4: return [4 /*yield*/, _a.apply(void 0, [_d.sent()])];
             case 5:
                 _d.sent();
@@ -137,7 +132,7 @@ var buildTestEnv = function (deployer, vaultOfRewards, restWallets) { return __a
                         restWallets[3],
                         restWallets[4],
                         restWallets[5],
-                    ], aaveToken, ethers_1.ethers.utils.parseEther('100').toString())];
+                    ], aaveToken, ethers.utils.parseEther('100').toString())];
             case 6:
                 _d.sent();
                 stakedToken = aaveToken.address;
@@ -145,71 +140,71 @@ var buildTestEnv = function (deployer, vaultOfRewards, restWallets) { return __a
                 return [4 /*yield*/, vaultOfRewards.getAddress()];
             case 7:
                 vaultOfRewardsAddress = _d.sent();
-                return [4 /*yield*/, contracts_accessors_1.deployInitializableAdminUpgradeabilityProxy()];
+                return [4 /*yield*/, deployInitializableAdminUpgradeabilityProxy()];
             case 8:
                 aaveIncentivesControllerProxy = _d.sent();
-                return [4 /*yield*/, contracts_accessors_1.deployInitializableAdminUpgradeabilityProxy()];
+                return [4 /*yield*/, deployInitializableAdminUpgradeabilityProxy()];
             case 9:
                 stakedAaveProxy = _d.sent();
-                return [4 /*yield*/, contracts_accessors_1.deployAaveIncentivesController([
+                return [4 /*yield*/, deployAaveIncentivesController([
                         aaveToken.address,
                         vaultOfRewardsAddress,
                         stakedAaveProxy.address,
-                        constants_1.PSM_STAKER_PREMIUM,
+                        PSM_STAKER_PREMIUM,
                         emissionManager,
                         (1000 * 60 * 60).toString(),
                     ])];
             case 10:
                 aaveIncentivesControllerImplementation = _d.sent();
-                return [4 /*yield*/, contracts_accessors_1.deployStakedAave([
+                return [4 /*yield*/, deployStakedAave([
                         stakedToken,
                         rewardsToken,
-                        constants_1.COOLDOWN_SECONDS,
-                        constants_1.UNSTAKE_WINDOW,
+                        COOLDOWN_SECONDS,
+                        UNSTAKE_WINDOW,
                         vaultOfRewardsAddress,
                         emissionManager,
                         (1000 * 60 * 60).toString(),
                     ])];
             case 11:
                 stakedAaveImpl = _d.sent();
-                return [4 /*yield*/, contracts_accessors_1.deployMockTransferHook()];
+                return [4 /*yield*/, deployMockTransferHook()];
             case 12:
                 mockTransferHook = _d.sent();
                 stakedAaveEncodedInitialize = stakedAaveImpl.interface.encodeFunctionData('initialize', [
                     mockTransferHook.address,
-                    constants_1.STAKED_AAVE_NAME,
-                    constants_1.STAKED_AAVE_SYMBOL,
-                    constants_1.STAKED_AAVE_DECIMALS,
+                    STAKED_AAVE_NAME,
+                    STAKED_AAVE_SYMBOL,
+                    STAKED_AAVE_DECIMALS,
                 ]);
                 return [4 /*yield*/, stakedAaveProxy['initialize(address,address,bytes)'](stakedAaveImpl.address, proxyAdmin, stakedAaveEncodedInitialize)];
             case 13:
                 _d.sent();
-                _b = misc_utils_1.waitForTx;
-                return [4 /*yield*/, aaveToken.connect(vaultOfRewards).approve(stakedAaveProxy.address, constants_1.MAX_UINT_AMOUNT)];
+                _b = waitForTx;
+                return [4 /*yield*/, aaveToken.connect(vaultOfRewards).approve(stakedAaveProxy.address, MAX_UINT_AMOUNT)];
             case 14: return [4 /*yield*/, _b.apply(void 0, [_d.sent()])];
             case 15:
                 _d.sent();
-                return [4 /*yield*/, contracts_helpers_1.insertContractAddressInDb(types_1.eContractid.StakedAave, stakedAaveProxy.address)];
+                return [4 /*yield*/, insertContractAddressInDb(eContractid.StakedAave, stakedAaveProxy.address)];
             case 16:
                 _d.sent();
                 peiEncodedInitialize = aaveIncentivesControllerImplementation.interface.encodeFunctionData('initialize');
                 return [4 /*yield*/, aaveIncentivesControllerProxy['initialize(address,address,bytes)'](aaveIncentivesControllerImplementation.address, proxyAdmin, peiEncodedInitialize)];
             case 17:
                 _d.sent();
-                _c = misc_utils_1.waitForTx;
+                _c = waitForTx;
                 return [4 /*yield*/, aaveToken
                         .connect(vaultOfRewards)
-                        .approve(aaveIncentivesControllerProxy.address, constants_1.MAX_UINT_AMOUNT)];
+                        .approve(aaveIncentivesControllerProxy.address, MAX_UINT_AMOUNT)];
             case 18: return [4 /*yield*/, _c.apply(void 0, [_d.sent()])];
             case 19:
                 _d.sent();
-                return [4 /*yield*/, contracts_helpers_1.insertContractAddressInDb(types_1.eContractid.AaveIncentivesController, aaveIncentivesControllerProxy.address)];
+                return [4 /*yield*/, insertContractAddressInDb(eContractid.AaveIncentivesController, aaveIncentivesControllerProxy.address)];
             case 20:
                 _d.sent();
-                return [4 /*yield*/, contracts_accessors_1.deployATokenMock(aaveIncentivesControllerProxy.address, 'aDai')];
+                return [4 /*yield*/, deployATokenMock(aaveIncentivesControllerProxy.address, 'aDai')];
             case 21:
                 _d.sent();
-                return [4 /*yield*/, contracts_accessors_1.deployATokenMock(aaveIncentivesControllerProxy.address, 'aWeth')];
+                return [4 /*yield*/, deployATokenMock(aaveIncentivesControllerProxy.address, 'aWeth')];
             case 22:
                 _d.sent();
                 console.timeEnd('setup');
@@ -221,17 +216,17 @@ before(function () { return __awaiter(void 0, void 0, void 0, function () {
     var _a, deployer, rewardsVault, restWallets;
     return __generator(this, function (_b) {
         switch (_b.label) {
-            case 0: return [4 /*yield*/, buidler_1.default.run('set-bre')];
+            case 0: return [4 /*yield*/, rawBRE.run('set-bre')];
             case 1:
                 _b.sent();
-                return [4 /*yield*/, contracts_helpers_1.getEthersSigners()];
+                return [4 /*yield*/, getEthersSigners()];
             case 2:
                 _a = __read.apply(void 0, [_b.sent()]), deployer = _a[0], rewardsVault = _a[1], restWallets = _a.slice(2);
                 console.log('-> Deploying test environment...');
                 return [4 /*yield*/, buildTestEnv(deployer, rewardsVault, restWallets)];
             case 3:
                 _b.sent();
-                return [4 /*yield*/, make_suite_1.initializeMakeSuite()];
+                return [4 /*yield*/, initializeMakeSuite()];
             case 4:
                 _b.sent();
                 console.log('\n***************');

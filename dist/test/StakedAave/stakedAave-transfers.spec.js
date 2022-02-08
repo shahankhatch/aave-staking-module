@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,27 +34,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var make_suite_1 = require("../helpers/make-suite");
-var ethers_1 = require("ethers");
-var reward_1 = require("./data-helpers/reward");
-var misc_utils_1 = require("../../helpers/misc-utils");
-var constants_1 = require("../../helpers/constants");
+import { makeSuite } from '../helpers/make-suite';
+import { ethers } from 'ethers';
+import { compareRewardsAtAction, compareRewardsAtTransfer } from './data-helpers/reward';
+import { timeLatest, increaseTimeAndMine, increaseTime } from '../../helpers/misc-utils';
+import { COOLDOWN_SECONDS, UNSTAKE_WINDOW } from '../../helpers/constants';
 var expect = require('chai').expect;
-make_suite_1.makeSuite('StakedAave. Transfers', function (testEnv) {
+makeSuite('StakedAave. Transfers', function (testEnv) {
     it('User 1 stakes 50 AAVE', function () { return __awaiter(void 0, void 0, void 0, function () {
         var stakedAave, aaveToken, users, amount, staker, actions;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('50');
+                    amount = ethers.utils.parseEther('50');
                     staker = users[1];
                     actions = function () { return [
                         aaveToken.connect(staker.signer).approve(stakedAave.address, amount),
                         stakedAave.connect(staker.signer).stake(staker.address, amount),
                     ]; };
-                    return [4 /*yield*/, reward_1.compareRewardsAtAction(stakedAave, staker.address, actions)];
+                    return [4 /*yield*/, compareRewardsAtAction(stakedAave, staker.address, actions)];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];
@@ -68,10 +66,10 @@ make_suite_1.makeSuite('StakedAave. Transfers', function (testEnv) {
             switch (_a.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('50').toString();
+                    amount = ethers.utils.parseEther('50').toString();
                     sender = users[1];
                     receiver = users[5];
-                    return [4 /*yield*/, reward_1.compareRewardsAtTransfer(stakedAave, sender, receiver, amount, true, false)];
+                    return [4 /*yield*/, compareRewardsAtTransfer(stakedAave, sender, receiver, amount, true, false)];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];
@@ -84,9 +82,9 @@ make_suite_1.makeSuite('StakedAave. Transfers', function (testEnv) {
             switch (_a.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('50');
+                    amount = ethers.utils.parseEther('50');
                     sender = users[5];
-                    return [4 /*yield*/, reward_1.compareRewardsAtTransfer(stakedAave, sender, sender, amount, true, true)];
+                    return [4 /*yield*/, compareRewardsAtTransfer(stakedAave, sender, sender, amount, true, true)];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];
@@ -99,14 +97,14 @@ make_suite_1.makeSuite('StakedAave. Transfers', function (testEnv) {
             switch (_a.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('50');
+                    amount = ethers.utils.parseEther('50');
                     sender = users[5];
                     receiver = users[2];
                     assetConfig = {
                         emissionPerSecond: '0',
                         totalStaked: '0',
                     };
-                    return [4 /*yield*/, reward_1.compareRewardsAtTransfer(stakedAave, sender, receiver, amount, false, false, assetConfig)];
+                    return [4 /*yield*/, compareRewardsAtTransfer(stakedAave, sender, receiver, amount, false, false, assetConfig)];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];
@@ -119,7 +117,7 @@ make_suite_1.makeSuite('StakedAave. Transfers', function (testEnv) {
             switch (_a.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('50');
+                    amount = ethers.utils.parseEther('50');
                     sender = users[3];
                     receiver = users[2];
                     assetConfig = {
@@ -130,10 +128,10 @@ make_suite_1.makeSuite('StakedAave. Transfers', function (testEnv) {
                         aaveToken.connect(sender.signer).approve(stakedAave.address, amount),
                         stakedAave.connect(sender.signer).stake(sender.address, amount),
                     ]; };
-                    return [4 /*yield*/, reward_1.compareRewardsAtAction(stakedAave, sender.address, actions, false, assetConfig)];
+                    return [4 /*yield*/, compareRewardsAtAction(stakedAave, sender.address, actions, false, assetConfig)];
                 case 1:
                     _a.sent();
-                    return [4 /*yield*/, reward_1.compareRewardsAtTransfer(stakedAave, sender, receiver, amount, false, false, assetConfig)];
+                    return [4 /*yield*/, compareRewardsAtTransfer(stakedAave, sender, receiver, amount, false, false, assetConfig)];
                 case 2:
                     _a.sent();
                     return [2 /*return*/];
@@ -158,7 +156,7 @@ make_suite_1.makeSuite('StakedAave. Transfers', function (testEnv) {
                     return [4 /*yield*/, stakedAave.connect(sender.signer).cooldown()];
                 case 2:
                     _a.sent();
-                    return [4 /*yield*/, misc_utils_1.timeLatest()];
+                    return [4 /*yield*/, timeLatest()];
                 case 3: return [4 /*yield*/, (_a.sent()).toString()];
                 case 4:
                     cooldownActivationTimestamp = _a.sent();
@@ -167,7 +165,7 @@ make_suite_1.makeSuite('StakedAave. Transfers', function (testEnv) {
                     cooldownTimestamp = _a.sent();
                     expect(cooldownTimestamp.gt('0')).to.be.ok;
                     expect(cooldownTimestamp.toString()).to.equal(cooldownActivationTimestamp);
-                    return [4 /*yield*/, reward_1.compareRewardsAtTransfer(stakedAave, sender, receiver, amount, false, false, assetConfig)];
+                    return [4 /*yield*/, compareRewardsAtTransfer(stakedAave, sender, receiver, amount, false, false, assetConfig)];
                 case 6:
                     _a.sent();
                     return [4 /*yield*/, stakedAave.stakersCooldowns(sender.address)];
@@ -185,7 +183,7 @@ make_suite_1.makeSuite('StakedAave. Transfers', function (testEnv) {
             switch (_a.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('10');
+                    amount = ethers.utils.parseEther('10');
                     sender = users[3];
                     receiver = users[2];
                     assetConfig = {
@@ -212,12 +210,12 @@ make_suite_1.makeSuite('StakedAave. Transfers', function (testEnv) {
                 case 5:
                     receiverCooldown = _a.sent();
                     // Increase time to an invalid time for cooldown
-                    return [4 /*yield*/, misc_utils_1.increaseTimeAndMine(receiverCooldown.add(constants_1.COOLDOWN_SECONDS).add(constants_1.UNSTAKE_WINDOW).add(1).toNumber())];
+                    return [4 /*yield*/, increaseTimeAndMine(receiverCooldown.add(COOLDOWN_SECONDS).add(UNSTAKE_WINDOW).add(1).toNumber())];
                 case 6:
                     // Increase time to an invalid time for cooldown
                     _a.sent();
                     // Transfer staked aave from sender to receiver, it will also transfer the cooldown status from sender to the receiver
-                    return [4 /*yield*/, reward_1.compareRewardsAtTransfer(stakedAave, sender, receiver, amount, false, false, assetConfig)];
+                    return [4 /*yield*/, compareRewardsAtTransfer(stakedAave, sender, receiver, amount, false, false, assetConfig)];
                 case 7:
                     // Transfer staked aave from sender to receiver, it will also transfer the cooldown status from sender to the receiver
                     _a.sent();
@@ -235,7 +233,7 @@ make_suite_1.makeSuite('StakedAave. Transfers', function (testEnv) {
             switch (_a.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('10');
+                    amount = ethers.utils.parseEther('10');
                     sender = users[3];
                     receiver = users[2];
                     assetConfig = {
@@ -247,7 +245,7 @@ make_suite_1.makeSuite('StakedAave. Transfers', function (testEnv) {
                 case 1:
                     // Enable cooldown for sender
                     _a.sent();
-                    return [4 /*yield*/, misc_utils_1.increaseTime(5)];
+                    return [4 /*yield*/, increaseTime(5)];
                 case 2:
                     _a.sent();
                     // Enable enable cooldown for receiver
@@ -260,7 +258,7 @@ make_suite_1.makeSuite('StakedAave. Transfers', function (testEnv) {
                 case 5:
                     receiverCooldown = _a.sent();
                     // Transfer staked aave from sender to receiver, it will also transfer the cooldown status from sender to the receiver
-                    return [4 /*yield*/, reward_1.compareRewardsAtTransfer(stakedAave, sender, receiver, amount, false, false, assetConfig)];
+                    return [4 /*yield*/, compareRewardsAtTransfer(stakedAave, sender, receiver, amount, false, false, assetConfig)];
                 case 6:
                     // Transfer staked aave from sender to receiver, it will also transfer the cooldown status from sender to the receiver
                     _a.sent();

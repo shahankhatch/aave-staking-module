@@ -1,13 +1,7 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.accounts = void 0;
-var bignumber_js_1 = __importDefault(require("bignumber.js"));
-var constants_1 = require("./helpers/constants");
-var toWad = function (value) { return new bignumber_js_1.default(value).times(constants_1.WAD).toFixed(); };
-exports.accounts = [
+import BigNumber from 'bignumber.js';
+import { WAD } from './helpers/constants';
+var toWad = function (value) { return new BigNumber(value).times(WAD).toFixed(); };
+export var accounts = [
     {
         secretKey: '0xc5e8f61d1ab959b397eecc0a37a6517b8e67a0e7cf1f4bce5591f3ed80199122',
         balance: toWad('1000000'),

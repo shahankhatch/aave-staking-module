@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,12 +34,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var config_1 = require("@nomiclabs/buidler/config");
-var types_1 = require("../../helpers/types");
-var etherscan_verification_1 = require("../../helpers/etherscan-verification");
-var constants_1 = require("../../helpers/constants");
-config_1.task('common-deployment', 'Deployment in for Main, Kovan and Ropsten networks')
+import { task } from '@nomiclabs/buidler/config';
+import { eContractid } from '../../helpers/types';
+import { checkVerification } from '../../helpers/etherscan-verification';
+import { getAaveAdminPerNetwork } from '../../helpers/constants';
+task('common-deployment', 'Deployment in for Main, Kovan and Ropsten networks')
     .addFlag('verify', 'Verify StakedAave and InitializableAdminUpgradeabilityProxy contract.')
     .addOptionalParam('vaultAddress', 'Use AaveIncentivesVault address by param instead of configuration.')
     .addOptionalParam('aaveAddress', 'Use AaveToken address by param instead of configuration.')
@@ -54,18 +52,18 @@ config_1.task('common-deployment', 'Deployment in for Main, Kovan and Ropsten ne
                 case 1:
                     BRE = _b.sent();
                     network = BRE.network.name;
-                    aaveAdmin = constants_1.getAaveAdminPerNetwork(network);
+                    aaveAdmin = getAaveAdminPerNetwork(network);
                     if (!aaveAdmin) {
                         throw Error('The --admin parameter must be set. Set an Ethereum address as --admin parameter input.');
                     }
                     // If Etherscan verification is enabled, check needed enviroments to prevent loss of gas in failed deployments.
                     if (verify) {
-                        etherscan_verification_1.checkVerification();
+                        checkVerification();
                     }
-                    return [4 /*yield*/, BRE.run("deploy-" + types_1.eContractid.StakedAave, { verify: verify, vaultAddress: vaultAddress, aaveAddress: aaveAddress })];
+                    return [4 /*yield*/, BRE.run("deploy-" + eContractid.StakedAave, { verify: verify, vaultAddress: vaultAddress, aaveAddress: aaveAddress })];
                 case 2:
                     _b.sent();
-                    return [4 /*yield*/, BRE.run("initialize-" + types_1.eContractid.StakedAave, {
+                    return [4 /*yield*/, BRE.run("initialize-" + eContractid.StakedAave, {
                             admin: aaveAdmin,
                         })];
                 case 3:

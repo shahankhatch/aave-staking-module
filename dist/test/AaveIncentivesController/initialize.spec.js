@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,11 +34,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var make_suite_1 = require("../helpers/make-suite");
-var constants_1 = require("../../helpers/constants");
+import { makeSuite } from '../helpers/make-suite';
+import { MAX_UINT_AMOUNT } from '../../helpers/constants';
 var expect = require('chai').expect;
-make_suite_1.makeSuite('AaveIncentivesController initialize', function (testEnv) {
+makeSuite('AaveIncentivesController initialize', function (testEnv) {
     // TODO: useless or not?
     it('Tries to call initialize second time, should be reverted', function () { return __awaiter(void 0, void 0, void 0, function () {
         var aaveIncentivesController;
@@ -62,7 +60,7 @@ make_suite_1.makeSuite('AaveIncentivesController initialize', function (testEnv)
                     aaveIncentivesController = testEnv.aaveIncentivesController, stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken;
                     _a = expect;
                     return [4 /*yield*/, aaveToken.allowance(aaveIncentivesController.address, stakedAave.address)];
-                case 1: return [4 /*yield*/, _a.apply(void 0, [(_b.sent()).toString()]).to.be.equal(constants_1.MAX_UINT_AMOUNT)];
+                case 1: return [4 /*yield*/, _a.apply(void 0, [(_b.sent()).toString()]).to.be.equal(MAX_UINT_AMOUNT)];
                 case 2:
                     _b.sent();
                     return [2 /*return*/];
