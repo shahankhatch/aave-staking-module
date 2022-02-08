@@ -5,7 +5,7 @@ import {StakedAave} from '../types/StakedAave';
 import {Ierc20Detailed} from '../types/Ierc20Detailed';
 import {InitializableAdminUpgradeabilityProxy} from '../types/InitializableAdminUpgradeabilityProxy';
 import {AaveIncentivesController} from '../types/AaveIncentivesController';
-import {LendingPoolMock} from '../types/LendingPoolMock';
+// import {LendingPoolMock} from '../types/LendingPoolMock';
 import {MockTransferHook} from '../types/MockTransferHook';
 import {verifyContract} from './etherscan-verification';
 import {ATokenMock} from '../types/ATokenMock';
@@ -97,7 +97,7 @@ export const deployATokenMock = async (aicAddress: tEthereumAddress, slug: strin
   await deployContract<ATokenMock>(eContractid.ATokenMock, [aicAddress], slug);
 
 export const getMintableErc20 = getContractFactory<MintableErc20>(eContractid.MintableErc20);
-export const getLendingPoolMock = getContractFactory<LendingPoolMock>(eContractid.LendingPoolMock);
+// export const getLendingPoolMock = getContractFactory<LendingPoolMock>(eContractid.LendingPoolMock);
 
 export const getStakedAave = getContractFactory<StakedAave>(eContractid.StakedAave);
 
