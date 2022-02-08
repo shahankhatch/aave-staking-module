@@ -1,20 +1,12 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.valueToZDBigNumber = exports.valueToBigNumber = exports.BigNumberZD = void 0;
-var bignumber_js_1 = __importDefault(require("bignumber.js"));
-exports.BigNumberZD = bignumber_js_1.default.clone({
+import BigNumber from 'bignumber.js';
+export var BigNumberZD = BigNumber.clone({
     DECIMAL_PLACES: 0,
-    ROUNDING_MODE: bignumber_js_1.default.ROUND_DOWN,
+    ROUNDING_MODE: BigNumber.ROUND_DOWN,
 });
-function valueToBigNumber(amount) {
-    return new bignumber_js_1.default(amount.toString());
+export function valueToBigNumber(amount) {
+    return new BigNumber(amount.toString());
 }
-exports.valueToBigNumber = valueToBigNumber;
-function valueToZDBigNumber(amount) {
-    return new exports.BigNumberZD(amount.toString());
+export function valueToZDBigNumber(amount) {
+    return new BigNumberZD(amount.toString());
 }
-exports.valueToZDBigNumber = valueToZDBigNumber;
 //# sourceMappingURL=bignumber.js.map

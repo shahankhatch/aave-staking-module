@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -46,15 +45,14 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var expect = require('chai').expect;
-var make_suite_1 = require("../helpers/make-suite");
-var base_math_1 = require("../DistributionManager/data-helpers/base-math");
-var asset_user_data_1 = require("../DistributionManager/data-helpers/asset-user-data");
-var asset_data_1 = require("../DistributionManager/data-helpers/asset-data");
-var misc_utils_1 = require("../../helpers/misc-utils");
-var ray_math_1 = require("../helpers/ray-math");
-var contracts_helpers_1 = require("../../helpers/contracts-helpers");
+import { makeSuite } from '../helpers/make-suite';
+import { getRewards } from '../DistributionManager/data-helpers/base-math';
+import { getUserIndex } from '../DistributionManager/data-helpers/asset-user-data';
+import { getAssetsData } from '../DistributionManager/data-helpers/asset-data';
+import { advanceBlock, timeLatest, waitForTx, increaseTimeAndMine } from '../../helpers/misc-utils';
+import { getNormalizedDistribution } from '../helpers/ray-math';
+import { getBlockTimestamp } from '../../helpers/contracts-helpers';
 var getRewardsBalanceScenarios = [
     {
         caseName: 'Accrued rewards are 0',
@@ -69,14 +67,14 @@ var getRewardsBalanceScenarios = [
         emissionPerSecond: '2432424',
     },
 ];
-make_suite_1.makeSuite('AaveIncentivesController getRewardsBalance tests', function (testEnv) {
+makeSuite('AaveIncentivesController getRewardsBalance tests', function (testEnv) {
     var e_1, _a;
     var _loop_1 = function (caseName, emissionPerSecond) {
         it(caseName, function () { return __awaiter(void 0, void 0, void 0, function () {
             var aaveIncentivesController, users, aDaiMock, distributionEndTimestamp, userAddress, stakedByUser, totalStaked, underlyingAsset, _a, _b, lastTxReceipt, _c, lastTxTimestamp, unclaimedRewardsBefore, unclaimedRewards, userIndex, assetData, expectedAssetIndex, expectedAccruedRewards;
             return __generator(this, function (_d) {
                 switch (_d.label) {
-                    case 0: return [4 /*yield*/, misc_utils_1.increaseTimeAndMine(100)];
+                    case 0: return [4 /*yield*/, increaseTimeAndMine(100)];
                     case 1:
                         _d.sent();
                         aaveIncentivesController = testEnv.aaveIncentivesController, users = testEnv.users, aDaiMock = testEnv.aDaiMock;
@@ -87,8 +85,8 @@ make_suite_1.makeSuite('AaveIncentivesController getRewardsBalance tests', funct
                         stakedByUser = 22 * caseName.length;
                         totalStaked = 33 * caseName.length;
                         underlyingAsset = aDaiMock.address;
-                        _a = misc_utils_1.advanceBlock;
-                        return [4 /*yield*/, misc_utils_1.timeLatest()];
+                        _a = advanceBlock;
+                        return [4 /*yield*/, timeLatest()];
                     case 3: 
                     // update emissionPerSecond in advance to not affect user calculations
                     return [4 /*yield*/, _a.apply(void 0, [(_d.sent()).plus(100).toNumber()])];
@@ -105,17 +103,17 @@ make_suite_1.makeSuite('AaveIncentivesController getRewardsBalance tests', funct
                     case 6: return [4 /*yield*/, aDaiMock.handleActionOnAic(userAddress, stakedByUser, totalStaked)];
                     case 7:
                         _d.sent();
-                        _b = misc_utils_1.advanceBlock;
-                        return [4 /*yield*/, misc_utils_1.timeLatest()];
+                        _b = advanceBlock;
+                        return [4 /*yield*/, timeLatest()];
                     case 8: return [4 /*yield*/, _b.apply(void 0, [(_d.sent()).plus(100).toNumber()])];
                     case 9:
                         _d.sent();
-                        _c = misc_utils_1.waitForTx;
+                        _c = waitForTx;
                         return [4 /*yield*/, aDaiMock.setUserBalanceAndSupply(stakedByUser, totalStaked)];
                     case 10: return [4 /*yield*/, _c.apply(void 0, [_d.sent()])];
                     case 11:
                         lastTxReceipt = _d.sent();
-                        return [4 /*yield*/, contracts_helpers_1.getBlockTimestamp(lastTxReceipt.blockNumber)];
+                        return [4 /*yield*/, getBlockTimestamp(lastTxReceipt.blockNumber)];
                     case 12:
                         lastTxTimestamp = _d.sent();
                         return [4 /*yield*/, aaveIncentivesController.getUserUnclaimedRewards(userAddress)];
@@ -124,17 +122,17 @@ make_suite_1.makeSuite('AaveIncentivesController getRewardsBalance tests', funct
                         return [4 /*yield*/, aaveIncentivesController.getRewardsBalance([underlyingAsset], userAddress)];
                     case 14:
                         unclaimedRewards = _d.sent();
-                        return [4 /*yield*/, asset_user_data_1.getUserIndex(aaveIncentivesController, userAddress, underlyingAsset)];
+                        return [4 /*yield*/, getUserIndex(aaveIncentivesController, userAddress, underlyingAsset)];
                     case 15:
                         userIndex = _d.sent();
-                        return [4 /*yield*/, asset_data_1.getAssetsData(aaveIncentivesController, [{ underlyingAsset: underlyingAsset }])];
+                        return [4 /*yield*/, getAssetsData(aaveIncentivesController, [{ underlyingAsset: underlyingAsset }])];
                     case 16:
                         assetData = (_d.sent())[0];
                         return [4 /*yield*/, aDaiMock.cleanUserState()];
                     case 17:
                         _d.sent();
-                        expectedAssetIndex = ray_math_1.getNormalizedDistribution(totalStaked, assetData.index, assetData.emissionPerSecond, assetData.lastUpdateTimestamp, lastTxTimestamp, distributionEndTimestamp);
-                        expectedAccruedRewards = base_math_1.getRewards(stakedByUser, expectedAssetIndex, userIndex).toString();
+                        expectedAssetIndex = getNormalizedDistribution(totalStaked, assetData.index, assetData.emissionPerSecond, assetData.lastUpdateTimestamp, lastTxTimestamp, distributionEndTimestamp);
+                        expectedAccruedRewards = getRewards(stakedByUser, expectedAssetIndex, userIndex).toString();
                         expect(unclaimedRewards.toString()).to.be.equal(unclaimedRewardsBefore.add(expectedAccruedRewards).toString());
                         return [2 /*return*/];
                 }

@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,17 +34,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var make_suite_1 = require("../helpers/make-suite");
-var constants_1 = require("../../helpers/constants");
-var misc_utils_1 = require("../../helpers/misc-utils");
-var ethers_1 = require("ethers");
-var bignumber_js_1 = __importDefault(require("bignumber.js"));
+import { makeSuite } from '../helpers/make-suite';
+import { COOLDOWN_SECONDS, UNSTAKE_WINDOW } from '../../helpers/constants';
+import { waitForTx, advanceBlock, timeLatest, increaseTimeAndMine, } from '../../helpers/misc-utils';
+import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
 var expect = require('chai').expect;
-make_suite_1.makeSuite('StakedAave. Redeem', function (testEnv) {
+makeSuite('StakedAave. Redeem', function (testEnv) {
     it('Reverts trying to redeem 0 amount', function () { return __awaiter(void 0, void 0, void 0, function () {
         var stakedAave, users, amount, staker;
         return __generator(this, function (_a) {
@@ -67,14 +62,14 @@ make_suite_1.makeSuite('StakedAave. Redeem', function (testEnv) {
             switch (_c.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('50');
+                    amount = ethers.utils.parseEther('50');
                     staker = users[1];
-                    _a = misc_utils_1.waitForTx;
+                    _a = waitForTx;
                     return [4 /*yield*/, aaveToken.connect(staker.signer).approve(stakedAave.address, amount)];
                 case 1: return [4 /*yield*/, _a.apply(void 0, [_c.sent()])];
                 case 2:
                     _c.sent();
-                    _b = misc_utils_1.waitForTx;
+                    _b = waitForTx;
                     return [4 /*yield*/, stakedAave.connect(staker.signer).stake(staker.address, amount)];
                 case 3: return [4 /*yield*/, _b.apply(void 0, [_c.sent()])];
                 case 4:
@@ -89,7 +84,7 @@ make_suite_1.makeSuite('StakedAave. Redeem', function (testEnv) {
             switch (_a.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('50');
+                    amount = ethers.utils.parseEther('50');
                     staker = users[1];
                     return [4 /*yield*/, expect(stakedAave.connect(staker.signer).redeem(staker.address, amount)).to.be.revertedWith('UNSTAKE_WINDOW_FINISHED')];
                 case 1:
@@ -104,34 +99,34 @@ make_suite_1.makeSuite('StakedAave. Redeem', function (testEnv) {
             switch (_b.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('50');
+                    amount = ethers.utils.parseEther('50');
                     staker = users[1];
                     return [4 /*yield*/, stakedAave.connect(staker.signer).cooldown()];
                 case 1:
                     _b.sent();
-                    _a = bignumber_js_1.default.bind;
+                    _a = BigNumber.bind;
                     return [4 /*yield*/, stakedAave.stakersCooldowns(staker.address)];
                 case 2: return [4 /*yield*/, (_b.sent()).toString()];
                 case 3:
-                    startedCooldownAt = new (_a.apply(bignumber_js_1.default, [void 0, _b.sent()]))();
-                    return [4 /*yield*/, misc_utils_1.timeLatest()];
+                    startedCooldownAt = new (_a.apply(BigNumber, [void 0, _b.sent()]))();
+                    return [4 /*yield*/, timeLatest()];
                 case 4:
                     currentTime = _b.sent();
-                    remainingCooldown = startedCooldownAt.plus(constants_1.COOLDOWN_SECONDS).minus(currentTime);
-                    return [4 /*yield*/, misc_utils_1.increaseTimeAndMine(Number(remainingCooldown.dividedBy('2').toString()))];
+                    remainingCooldown = startedCooldownAt.plus(COOLDOWN_SECONDS).minus(currentTime);
+                    return [4 /*yield*/, increaseTimeAndMine(Number(remainingCooldown.dividedBy('2').toString()))];
                 case 5:
                     _b.sent();
                     return [4 /*yield*/, expect(stakedAave.connect(staker.signer).redeem(staker.address, amount)).to.be.revertedWith('INSUFFICIENT_COOLDOWN')];
                 case 6:
                     _b.sent();
-                    return [4 /*yield*/, misc_utils_1.advanceBlock(startedCooldownAt.plus(new bignumber_js_1.default(constants_1.COOLDOWN_SECONDS).minus(1)).toNumber())];
+                    return [4 /*yield*/, advanceBlock(startedCooldownAt.plus(new BigNumber(COOLDOWN_SECONDS).minus(1)).toNumber())];
                 case 7:
                     _b.sent(); // We fast-forward time to just before COOLDOWN_SECONDS
                     return [4 /*yield*/, expect(stakedAave.connect(staker.signer).redeem(staker.address, amount)).to.be.revertedWith('INSUFFICIENT_COOLDOWN')];
                 case 8:
                     _b.sent();
-                    return [4 /*yield*/, misc_utils_1.advanceBlock(startedCooldownAt
-                            .plus(new bignumber_js_1.default(constants_1.COOLDOWN_SECONDS).plus(constants_1.UNSTAKE_WINDOW).plus(1))
+                    return [4 /*yield*/, advanceBlock(startedCooldownAt
+                            .plus(new BigNumber(COOLDOWN_SECONDS).plus(UNSTAKE_WINDOW).plus(1))
                             .toNumber())];
                 case 9:
                     _b.sent(); // We fast-forward time to just after the unstake window
@@ -148,37 +143,37 @@ make_suite_1.makeSuite('StakedAave. Redeem', function (testEnv) {
             switch (_d.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('1000');
+                    amount = ethers.utils.parseEther('1000');
                     staker = users[1];
                     return [4 /*yield*/, stakedAave.connect(staker.signer).cooldown()];
                 case 1:
                     _d.sent();
-                    _a = bignumber_js_1.default.bind;
+                    _a = BigNumber.bind;
                     return [4 /*yield*/, stakedAave.stakersCooldowns(staker.address)];
                 case 2: return [4 /*yield*/, (_d.sent()).toString()];
                 case 3:
-                    startedCooldownAt = new (_a.apply(bignumber_js_1.default, [void 0, _d.sent()]))();
-                    return [4 /*yield*/, misc_utils_1.timeLatest()];
+                    startedCooldownAt = new (_a.apply(BigNumber, [void 0, _d.sent()]))();
+                    return [4 /*yield*/, timeLatest()];
                 case 4:
                     currentTime = _d.sent();
-                    remainingCooldown = startedCooldownAt.plus(constants_1.COOLDOWN_SECONDS).minus(currentTime);
-                    return [4 /*yield*/, misc_utils_1.increaseTimeAndMine(remainingCooldown.plus(1).toNumber())];
+                    remainingCooldown = startedCooldownAt.plus(COOLDOWN_SECONDS).minus(currentTime);
+                    return [4 /*yield*/, increaseTimeAndMine(remainingCooldown.plus(1).toNumber())];
                 case 5:
                     _d.sent();
-                    _b = bignumber_js_1.default.bind;
+                    _b = BigNumber.bind;
                     return [4 /*yield*/, aaveToken.balanceOf(staker.address)];
                 case 6:
-                    aaveBalanceBefore = new (_b.apply(bignumber_js_1.default, [void 0, (_d.sent()).toString()]))();
+                    aaveBalanceBefore = new (_b.apply(BigNumber, [void 0, (_d.sent()).toString()]))();
                     return [4 /*yield*/, stakedAave.balanceOf(staker.address)];
                 case 7:
                     stakedAaveBalanceBefore = (_d.sent()).toString();
                     return [4 /*yield*/, stakedAave.connect(staker.signer).redeem(staker.address, amount)];
                 case 8:
                     _d.sent();
-                    _c = bignumber_js_1.default.bind;
+                    _c = BigNumber.bind;
                     return [4 /*yield*/, aaveToken.balanceOf(staker.address)];
                 case 9:
-                    aaveBalanceAfter = new (_c.apply(bignumber_js_1.default, [void 0, (_d.sent()).toString()]))();
+                    aaveBalanceAfter = new (_c.apply(BigNumber, [void 0, (_d.sent()).toString()]))();
                     return [4 /*yield*/, stakedAave.balanceOf(staker.address)];
                 case 10:
                     stakedAaveBalanceAfter = (_d.sent()).toString();
@@ -194,14 +189,14 @@ make_suite_1.makeSuite('StakedAave. Redeem', function (testEnv) {
             switch (_f.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('50');
+                    amount = ethers.utils.parseEther('50');
                     staker = users[1];
-                    _a = misc_utils_1.waitForTx;
+                    _a = waitForTx;
                     return [4 /*yield*/, aaveToken.connect(staker.signer).approve(stakedAave.address, amount)];
                 case 1: return [4 /*yield*/, _a.apply(void 0, [_f.sent()])];
                 case 2:
                     _f.sent();
-                    _b = misc_utils_1.waitForTx;
+                    _b = waitForTx;
                     return [4 /*yield*/, stakedAave.connect(staker.signer).stake(staker.address, amount)];
                 case 3: return [4 /*yield*/, _b.apply(void 0, [_f.sent()])];
                 case 4:
@@ -209,29 +204,29 @@ make_suite_1.makeSuite('StakedAave. Redeem', function (testEnv) {
                     return [4 /*yield*/, stakedAave.connect(staker.signer).cooldown()];
                 case 5:
                     _f.sent();
-                    _c = bignumber_js_1.default.bind;
+                    _c = BigNumber.bind;
                     return [4 /*yield*/, stakedAave.stakersCooldowns(staker.address)];
                 case 6: return [4 /*yield*/, (_f.sent()).toString()];
                 case 7:
-                    startedCooldownAt = new (_c.apply(bignumber_js_1.default, [void 0, _f.sent()]))();
-                    return [4 /*yield*/, misc_utils_1.timeLatest()];
+                    startedCooldownAt = new (_c.apply(BigNumber, [void 0, _f.sent()]))();
+                    return [4 /*yield*/, timeLatest()];
                 case 8:
                     currentTime = _f.sent();
-                    remainingCooldown = startedCooldownAt.plus(constants_1.COOLDOWN_SECONDS).minus(currentTime);
-                    return [4 /*yield*/, misc_utils_1.increaseTimeAndMine(remainingCooldown.plus(1).toNumber())];
+                    remainingCooldown = startedCooldownAt.plus(COOLDOWN_SECONDS).minus(currentTime);
+                    return [4 /*yield*/, increaseTimeAndMine(remainingCooldown.plus(1).toNumber())];
                 case 9:
                     _f.sent();
-                    _d = bignumber_js_1.default.bind;
+                    _d = BigNumber.bind;
                     return [4 /*yield*/, aaveToken.balanceOf(staker.address)];
                 case 10:
-                    aaveBalanceBefore = new (_d.apply(bignumber_js_1.default, [void 0, (_f.sent()).toString()]))();
+                    aaveBalanceBefore = new (_d.apply(BigNumber, [void 0, (_f.sent()).toString()]))();
                     return [4 /*yield*/, stakedAave.connect(staker.signer).redeem(staker.address, amount)];
                 case 11:
                     _f.sent();
-                    _e = bignumber_js_1.default.bind;
+                    _e = BigNumber.bind;
                     return [4 /*yield*/, aaveToken.balanceOf(staker.address)];
                 case 12:
-                    aaveBalanceAfter = new (_e.apply(bignumber_js_1.default, [void 0, (_f.sent()).toString()]))();
+                    aaveBalanceAfter = new (_e.apply(BigNumber, [void 0, (_f.sent()).toString()]))();
                     expect(aaveBalanceAfter.minus(amount.toString()).toString()).to.be.equal(aaveBalanceBefore.toString());
                     return [2 /*return*/];
             }
@@ -243,14 +238,14 @@ make_suite_1.makeSuite('StakedAave. Redeem', function (testEnv) {
             switch (_e.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('50');
+                    amount = ethers.utils.parseEther('50');
                     staker = users[5];
-                    _a = misc_utils_1.waitForTx;
+                    _a = waitForTx;
                     return [4 /*yield*/, aaveToken.connect(staker.signer).approve(stakedAave.address, amount)];
                 case 1: return [4 /*yield*/, _a.apply(void 0, [_e.sent()])];
                 case 2:
                     _e.sent();
-                    _b = misc_utils_1.waitForTx;
+                    _b = waitForTx;
                     return [4 /*yield*/, stakedAave.connect(staker.signer).stake(staker.address, amount)];
                 case 3: return [4 /*yield*/, _b.apply(void 0, [_e.sent()])];
                 case 4:
@@ -258,25 +253,25 @@ make_suite_1.makeSuite('StakedAave. Redeem', function (testEnv) {
                     return [4 /*yield*/, stakedAave.connect(staker.signer).cooldown()];
                 case 5:
                     _e.sent();
-                    return [4 /*yield*/, misc_utils_1.timeLatest()];
+                    return [4 /*yield*/, timeLatest()];
                 case 6:
                     cooldownActivationTimestamp = _e.sent();
-                    return [4 /*yield*/, misc_utils_1.advanceBlock(cooldownActivationTimestamp.plus(new bignumber_js_1.default(constants_1.COOLDOWN_SECONDS).plus(1)).toNumber())];
+                    return [4 /*yield*/, advanceBlock(cooldownActivationTimestamp.plus(new BigNumber(COOLDOWN_SECONDS).plus(1)).toNumber())];
                 case 7:
                     _e.sent();
-                    _c = bignumber_js_1.default.bind;
+                    _c = BigNumber.bind;
                     return [4 /*yield*/, aaveToken.balanceOf(staker.address)];
                 case 8:
-                    aaveBalanceBefore = new (_c.apply(bignumber_js_1.default, [void 0, (_e.sent()).toString()]))();
+                    aaveBalanceBefore = new (_c.apply(BigNumber, [void 0, (_e.sent()).toString()]))();
                     return [4 /*yield*/, stakedAave
                             .connect(staker.signer)
-                            .redeem(staker.address, ethers_1.ethers.utils.parseEther('50').div(2))];
+                            .redeem(staker.address, ethers.utils.parseEther('50').div(2))];
                 case 9:
                     _e.sent();
-                    _d = bignumber_js_1.default.bind;
+                    _d = BigNumber.bind;
                     return [4 /*yield*/, aaveToken.balanceOf(staker.address)];
                 case 10:
-                    aaveBalanceAfter = new (_d.apply(bignumber_js_1.default, [void 0, (_e.sent()).toString()]))();
+                    aaveBalanceAfter = new (_d.apply(BigNumber, [void 0, (_e.sent()).toString()]))();
                     expect(aaveBalanceAfter.minus(amount.toString()).toString()).to.be.equal(aaveBalanceBefore.div(2).toFixed());
                     return [2 /*return*/];
             }
@@ -288,14 +283,14 @@ make_suite_1.makeSuite('StakedAave. Redeem', function (testEnv) {
             switch (_e.label) {
                 case 0:
                     stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, users = testEnv.users;
-                    amount = ethers_1.ethers.utils.parseEther('50');
+                    amount = ethers.utils.parseEther('50');
                     staker = users[5];
-                    _a = misc_utils_1.waitForTx;
+                    _a = waitForTx;
                     return [4 /*yield*/, aaveToken.connect(staker.signer).approve(stakedAave.address, amount)];
                 case 1: return [4 /*yield*/, _a.apply(void 0, [_e.sent()])];
                 case 2:
                     _e.sent();
-                    _b = misc_utils_1.waitForTx;
+                    _b = waitForTx;
                     return [4 /*yield*/, stakedAave.connect(staker.signer).stake(staker.address, amount)];
                 case 3: return [4 /*yield*/, _b.apply(void 0, [_e.sent()])];
                 case 4:
@@ -303,23 +298,23 @@ make_suite_1.makeSuite('StakedAave. Redeem', function (testEnv) {
                     return [4 /*yield*/, stakedAave.connect(staker.signer).cooldown()];
                 case 5:
                     _e.sent();
-                    return [4 /*yield*/, misc_utils_1.timeLatest()];
+                    return [4 /*yield*/, timeLatest()];
                 case 6:
                     cooldownActivationTimestamp = _e.sent();
-                    return [4 /*yield*/, misc_utils_1.advanceBlock(cooldownActivationTimestamp.plus(new bignumber_js_1.default(constants_1.COOLDOWN_SECONDS).plus(1)).toNumber())];
+                    return [4 /*yield*/, advanceBlock(cooldownActivationTimestamp.plus(new BigNumber(COOLDOWN_SECONDS).plus(1)).toNumber())];
                 case 7:
                     _e.sent();
-                    _c = bignumber_js_1.default.bind;
+                    _c = BigNumber.bind;
                     return [4 /*yield*/, aaveToken.balanceOf(staker.address)];
                 case 8:
-                    aaveBalanceBefore = new (_c.apply(bignumber_js_1.default, [void 0, (_e.sent()).toString()]))();
+                    aaveBalanceBefore = new (_c.apply(BigNumber, [void 0, (_e.sent()).toString()]))();
                     return [4 /*yield*/, stakedAave.connect(staker.signer).redeem(staker.address, amount)];
                 case 9:
                     _e.sent();
-                    _d = bignumber_js_1.default.bind;
+                    _d = BigNumber.bind;
                     return [4 /*yield*/, aaveToken.balanceOf(staker.address)];
                 case 10:
-                    aaveBalanceAfter = new (_d.apply(bignumber_js_1.default, [void 0, (_e.sent()).toString()]))();
+                    aaveBalanceAfter = new (_d.apply(BigNumber, [void 0, (_e.sent()).toString()]))();
                     expect(aaveBalanceAfter.minus(amount.toString()).toString()).to.be.equal(aaveBalanceBefore.toString());
                     return [2 /*return*/];
             }

@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -46,10 +45,8 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.eventChecker = exports.comparatorEngine = void 0;
 var expect = require('chai').expect;
-function comparatorEngine(fieldsToTrack, updateInput, stateBefore, stateAfter, actionBlockTimestamp, _a) {
+export function comparatorEngine(fieldsToTrack, updateInput, stateBefore, stateAfter, actionBlockTimestamp, _a) {
     var _b = _a.fieldsEqualToInput, fieldsEqualToInput = _b === void 0 ? [] : _b, _c = _a.fieldsEqualToAnother, fieldsEqualToAnother = _c === void 0 ? [] : _c, _d = _a.fieldsWithCustomLogic, fieldsWithCustomLogic = _d === void 0 ? [] : _d;
     return __awaiter(this, void 0, void 0, function () {
         var unchangedFields, unchangedFields_1, unchangedFields_1_1, fieldName, fieldsEqualToInput_1, fieldsEqualToInput_1_1, fieldName, fieldsEqualToAnother_1, fieldsEqualToAnother_1_1, _e, fieldName, equalTo, fieldsWithCustomLogic_1, fieldsWithCustomLogic_1_1, _f, fieldName, logic, logicOutput, equalTo, _g, e_1_1;
@@ -151,8 +148,7 @@ function comparatorEngine(fieldsToTrack, updateInput, stateBefore, stateAfter, a
         });
     });
 }
-exports.comparatorEngine = comparatorEngine;
-function eventChecker(event, name, args) {
+export function eventChecker(event, name, args) {
     var _a;
     if (args === void 0) { args = []; }
     expect(event.event).to.be.equal(name, "Incorrect event emitted");
@@ -161,5 +157,4 @@ function eventChecker(event, name, args) {
         expect(event.args && event.args[index].toString()).to.be.equal(arg.toString(), name + " has incorrect value on position " + index);
     });
 }
-exports.eventChecker = eventChecker;
 //# sourceMappingURL=comparator-engine.js.map

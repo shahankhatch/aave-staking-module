@@ -1,4 +1,3 @@
-"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -57,14 +56,13 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var expect = require('chai').expect;
-var make_suite_1 = require("../helpers/make-suite");
-var constants_1 = require("../../helpers/constants");
-var misc_utils_1 = require("../../helpers/misc-utils");
-var contracts_helpers_1 = require("../../helpers/contracts-helpers");
-var comparator_engine_1 = require("../helpers/comparator-engine");
-var asset_data_1 = require("../DistributionManager/data-helpers/asset-data");
+import { makeSuite } from '../helpers/make-suite';
+import { RANDOM_ADDRESSES } from '../../helpers/constants';
+import { increaseTime, waitForTx } from '../../helpers/misc-utils';
+import { getBlockTimestamp } from '../../helpers/contracts-helpers';
+import { eventChecker } from '../helpers/comparator-engine';
+import { assetDataComparator, getAssetsData, } from '../DistributionManager/data-helpers/asset-data';
 var configureAssetScenarios = [
     {
         caseName: 'Submit initial config for the assets',
@@ -161,7 +159,7 @@ var configureAssetScenarios = [
         },
     },
 ];
-make_suite_1.makeSuite('AaveIncentivesController configureAssets', function (testEnv) {
+makeSuite('AaveIncentivesController configureAssets', function (testEnv) {
     var e_1, _a;
     // custom checks
     it('Tries to submit config updates not from emission manager', function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -189,30 +187,30 @@ make_suite_1.makeSuite('AaveIncentivesController configureAssets', function (tes
                         distributionEndTimestamp = _b.sent();
                         assetConfigsUpdate = [];
                         assets.forEach(function (assetConfig, i) {
-                            if (i > constants_1.RANDOM_ADDRESSES.length) {
+                            if (i > RANDOM_ADDRESSES.length) {
                                 throw new Error('to many assets to test');
                             }
-                            var underlyingAsset = constants_1.RANDOM_ADDRESSES[i];
+                            var underlyingAsset = RANDOM_ADDRESSES[i];
                             assetConfigsUpdate.push(__assign(__assign({}, assetConfig), { underlyingAsset: underlyingAsset }));
                         });
-                        return [4 /*yield*/, asset_data_1.getAssetsData(aaveIncentivesController, assetConfigsUpdate)];
+                        return [4 /*yield*/, getAssetsData(aaveIncentivesController, assetConfigsUpdate)];
                     case 2:
                         assetsConfigBefore = _b.sent();
                         if (!customTimeMovement) return [3 /*break*/, 4];
-                        return [4 /*yield*/, misc_utils_1.increaseTime(customTimeMovement)];
+                        return [4 /*yield*/, increaseTime(customTimeMovement)];
                     case 3:
                         _b.sent();
                         _b.label = 4;
                     case 4:
-                        _a = misc_utils_1.waitForTx;
+                        _a = waitForTx;
                         return [4 /*yield*/, aaveIncentivesController.configureAssets(assetConfigsUpdate)];
                     case 5: return [4 /*yield*/, _a.apply(void 0, [_b.sent()])];
                     case 6:
                         txReceipt = _b.sent();
-                        return [4 /*yield*/, contracts_helpers_1.getBlockTimestamp(txReceipt.blockNumber)];
+                        return [4 /*yield*/, getBlockTimestamp(txReceipt.blockNumber)];
                     case 7:
                         configsUpdateBlockTimestamp = _b.sent();
-                        return [4 /*yield*/, asset_data_1.getAssetsData(aaveIncentivesController, assetConfigsUpdate)];
+                        return [4 /*yield*/, getAssetsData(aaveIncentivesController, assetConfigsUpdate)];
                     case 8:
                         assetsConfigAfter = _b.sent();
                         eventsEmitted = txReceipt.events || [];
@@ -225,18 +223,18 @@ make_suite_1.makeSuite('AaveIncentivesController configureAssets', function (tes
                         assetConfigUpdateInput = assetConfigsUpdate[i];
                         assetConfigAfter = assetsConfigAfter[i];
                         if (!assetConfigAfter.index.eq(assetConfigBefore.index)) {
-                            comparator_engine_1.eventChecker(eventsEmitted[eventArrayIndex], 'AssetIndexUpdated', [
+                            eventChecker(eventsEmitted[eventArrayIndex], 'AssetIndexUpdated', [
                                 assetConfigAfter.underlyingAsset,
                                 assetConfigAfter.index,
                             ]);
                             eventArrayIndex += 1;
                         }
-                        comparator_engine_1.eventChecker(eventsEmitted[eventArrayIndex], 'AssetConfigUpdated', [
+                        eventChecker(eventsEmitted[eventArrayIndex], 'AssetConfigUpdated', [
                             assetConfigAfter.underlyingAsset,
                             assetConfigAfter.emissionPerSecond,
                         ]);
                         eventArrayIndex += 1;
-                        return [4 /*yield*/, asset_data_1.assetDataComparator(assetConfigUpdateInput, assetConfigBefore, assetConfigAfter, configsUpdateBlockTimestamp, distributionEndTimestamp.toNumber(), compareRules || {})];
+                        return [4 /*yield*/, assetDataComparator(assetConfigUpdateInput, assetConfigBefore, assetConfigAfter, configsUpdateBlockTimestamp, distributionEndTimestamp.toNumber(), compareRules || {})];
                     case 10:
                         _b.sent();
                         _b.label = 11;

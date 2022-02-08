@@ -1,4 +1,3 @@
-"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,17 +34,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var config_1 = require("@nomiclabs/buidler/config");
-var types_1 = require("../../helpers/types");
-config_1.task('dev-deployment', 'Deployment in buidlerevm').setAction(function (_, localBRE) { return __awaiter(void 0, void 0, void 0, function () {
+import { task } from '@nomiclabs/buidler/config';
+import { eContractid } from '../../helpers/types';
+task('dev-deployment', 'Deployment in buidlerevm').setAction(function (_, localBRE) { return __awaiter(void 0, void 0, void 0, function () {
     var BRE, aaveStake;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, localBRE.run('set-bre')];
             case 1:
                 BRE = _a.sent();
-                return [4 /*yield*/, BRE.run("deploy-" + types_1.eContractid.StakedAave)];
+                return [4 /*yield*/, BRE.run("deploy-" + eContractid.StakedAave)];
             case 2:
                 aaveStake = (_a.sent());
                 return [2 /*return*/];
