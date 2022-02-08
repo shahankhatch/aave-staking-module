@@ -6,7 +6,7 @@ export const MAX_UINT_AMOUNT =
 export const MOCK_ETH_ADDRESS = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
 export const WAD = Math.pow(10, 18).toString();
 export const COOLDOWN_SECONDS = '3600'; // 1 hour in seconds
-export const UNSTAKE_WINDOW = '1800'; // 30 min in seconds
+export const UNSTAKE_WINDOW = '18000'; // 30 min in seconds
 export const DISTRIBUTION_DURATION = '86400'; // 1 day in seconds
 
 export const STAKED_AAVE_NAME = 'Staked Aave';
