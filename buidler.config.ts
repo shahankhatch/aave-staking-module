@@ -1,3 +1,4 @@
+// @ts-ignore
 import {usePlugin} from '@nomiclabs/buidler/config';
 import path from 'path';
 import fs from 'fs';
@@ -59,8 +60,8 @@ const config = {
     etherscan: {
         apiKey: ETHERSCAN_KEY,
     },
-    // defaultNetwork: 'localhost',
-    defaultNetwork: 'buidlerevm',
+    defaultNetwork: 'localhost',
+    // defaultNetwork: 'buidlerevm',
     mocha: {
         timeout: 0,
     },
