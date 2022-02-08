@@ -12,7 +12,7 @@
     "buidler help": "buidler help",
     "compile": "buidler compile",
     "hardhat-compile": "hardhat compile",
-    "types-gen": "rm -rf ./artifacts/**/*.dbg.json && typechain --target ethers-v5 --outDir ./types './artifacts/contracts/**/*.json'",
+    "types-gen": "typechain --target ethers-v5 --outDir ./types './artifacts/**/*.json'",
     "test": "buidler test",
     "test-pei": "npm run test test/__setup.spec.ts test/AaveIncentivesController/*.spec.ts ",
     "test-pei-js": "npm run test dist/test/__setup.spec.js dist/test/AaveIncentivesController/*.spec.js",
