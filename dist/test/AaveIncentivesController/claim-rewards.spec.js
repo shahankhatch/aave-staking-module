@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -45,17 +46,18 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
-import { MAX_UINT_AMOUNT, PSM_STAKER_PREMIUM, RANDOM_ADDRESSES } from '../../helpers/constants';
+Object.defineProperty(exports, "__esModule", { value: true });
+var constants_1 = require("../../helpers/constants");
 var expect = require('chai').expect;
-import { makeSuite } from '../helpers/make-suite';
-import { BigNumber } from 'ethers';
-import { waitForTx, increaseTimeAndMine } from '../../helpers/misc-utils';
-import { comparatorEngine, eventChecker } from '../helpers/comparator-engine';
-import { getUserIndex } from '../DistributionManager/data-helpers/asset-user-data';
-import { assetDataComparator, getAssetsData } from '../DistributionManager/data-helpers/asset-data';
-import { getBlockTimestamp } from '../../helpers/contracts-helpers';
-import { getRewards } from '../DistributionManager/data-helpers/base-math';
-import { fail } from 'assert';
+var make_suite_1 = require("../helpers/make-suite");
+var ethers_1 = require("ethers");
+var misc_utils_1 = require("../../helpers/misc-utils");
+var comparator_engine_1 = require("../helpers/comparator-engine");
+var asset_user_data_1 = require("../DistributionManager/data-helpers/asset-user-data");
+var asset_data_1 = require("../DistributionManager/data-helpers/asset-data");
+var contracts_helpers_1 = require("../../helpers/contracts-helpers");
+var base_math_1 = require("../DistributionManager/data-helpers/base-math");
+var assert_1 = require("assert");
 var getRewardsBalanceScenarios = [
     {
         caseName: 'Accrued rewards are 0, claim 0',
@@ -75,7 +77,7 @@ var getRewardsBalanceScenarios = [
     {
         caseName: 'Should allow -1',
         emissionPerSecond: '2432424',
-        amountToClaim: MAX_UINT_AMOUNT,
+        amountToClaim: constants_1.MAX_UINT_AMOUNT,
         toStake: false,
     },
     {
@@ -94,17 +96,17 @@ var getRewardsBalanceScenarios = [
         caseName: 'Should withdraw to another user',
         emissionPerSecond: '100',
         amountToClaim: '1034',
-        to: RANDOM_ADDRESSES[5],
+        to: constants_1.RANDOM_ADDRESSES[5],
     },
     {
         caseName: 'Should withdraw to another user and stake',
         emissionPerSecond: '100',
         amountToClaim: '1034',
-        to: RANDOM_ADDRESSES[5],
+        to: constants_1.RANDOM_ADDRESSES[5],
         toStake: true,
     },
 ];
-makeSuite('AaveIncentivesController claimRewards tests', function (testEnv) {
+make_suite_1.makeSuite('AaveIncentivesController claimRewards tests', function (testEnv) {
     var e_1, _a;
     var _loop_1 = function (caseName, _amountToClaim, to, toStake, emissionPerSecond) {
         var amountToClaim = _amountToClaim;
@@ -112,7 +114,7 @@ makeSuite('AaveIncentivesController claimRewards tests', function (testEnv) {
             var aaveIncentivesController, stakedAave, aaveToken, aDaiMock, distributionEndTimestamp, userAddress, underlyingAsset, stakedByUser, totalStaked, destinationAddress, destinationAddressBalanceBefore, unclaimedRewardsBefore, userIndexBefore, assetDataBefore, claimRewardsReceipt, _a, eventsEmitted, actionBlockTimestamp, userIndexAfter, assetDataAfter, unclaimedRewardsAfter, destinationAddressBalanceAfter, claimedAmount, expectedAccruedRewards, unclaimedRewardsCalc, expectedClaimedAmount, rewardsAccruedEvent, rewardsClaimedEvent;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, increaseTimeAndMine(100)];
+                    case 0: return [4 /*yield*/, misc_utils_1.increaseTimeAndMine(100)];
                     case 1:
                         _b.sent();
                         aaveIncentivesController = testEnv.aaveIncentivesController, stakedAave = testEnv.stakedAave, aaveToken = testEnv.aaveToken, aDaiMock = testEnv.aDaiMock;
@@ -143,25 +145,25 @@ makeSuite('AaveIncentivesController claimRewards tests', function (testEnv) {
                         return [4 /*yield*/, aaveIncentivesController.getUserUnclaimedRewards(userAddress)];
                     case 8:
                         unclaimedRewardsBefore = _b.sent();
-                        return [4 /*yield*/, getUserIndex(aaveIncentivesController, userAddress, underlyingAsset)];
+                        return [4 /*yield*/, asset_user_data_1.getUserIndex(aaveIncentivesController, userAddress, underlyingAsset)];
                     case 9:
                         userIndexBefore = _b.sent();
-                        return [4 /*yield*/, getAssetsData(aaveIncentivesController, [{ underlyingAsset: underlyingAsset }])];
+                        return [4 /*yield*/, asset_data_1.getAssetsData(aaveIncentivesController, [{ underlyingAsset: underlyingAsset }])];
                     case 10:
                         assetDataBefore = (_b.sent())[0];
-                        _a = waitForTx;
+                        _a = misc_utils_1.waitForTx;
                         return [4 /*yield*/, aaveIncentivesController.claimRewards([underlyingAsset], amountToClaim, destinationAddress, toStake || false)];
                     case 11: return [4 /*yield*/, _a.apply(void 0, [_b.sent()])];
                     case 12:
                         claimRewardsReceipt = _b.sent();
                         eventsEmitted = claimRewardsReceipt.events || [];
-                        return [4 /*yield*/, getBlockTimestamp(claimRewardsReceipt.blockNumber)];
+                        return [4 /*yield*/, contracts_helpers_1.getBlockTimestamp(claimRewardsReceipt.blockNumber)];
                     case 13:
                         actionBlockTimestamp = _b.sent();
-                        return [4 /*yield*/, getUserIndex(aaveIncentivesController, userAddress, underlyingAsset)];
+                        return [4 /*yield*/, asset_user_data_1.getUserIndex(aaveIncentivesController, userAddress, underlyingAsset)];
                     case 14:
                         userIndexAfter = _b.sent();
-                        return [4 /*yield*/, getAssetsData(aaveIncentivesController, [{ underlyingAsset: underlyingAsset }])];
+                        return [4 /*yield*/, asset_data_1.getAssetsData(aaveIncentivesController, [{ underlyingAsset: underlyingAsset }])];
                     case 15:
                         assetDataAfter = (_b.sent())[0];
                         return [4 /*yield*/, aaveIncentivesController.getUserUnclaimedRewards(userAddress)];
@@ -171,7 +173,7 @@ makeSuite('AaveIncentivesController claimRewards tests', function (testEnv) {
                     case 17:
                         destinationAddressBalanceAfter = _b.sent();
                         claimedAmount = destinationAddressBalanceAfter.sub(destinationAddressBalanceBefore);
-                        expectedAccruedRewards = getRewards(stakedByUser, userIndexAfter, userIndexBefore).toString();
+                        expectedAccruedRewards = base_math_1.getRewards(stakedByUser, userIndexAfter, userIndexBefore).toString();
                         return [4 /*yield*/, aDaiMock.cleanUserState()];
                     case 18:
                         _b.sent();
@@ -180,24 +182,24 @@ makeSuite('AaveIncentivesController claimRewards tests', function (testEnv) {
                         expect(userIndexBefore.toString()).to.be.equal(userIndexAfter.toString(), 'userIndexAfter should not change');
                         expect(unclaimedRewardsBefore.toString()).to.be.equal(unclaimedRewardsAfter.toString(), 'unclaimedRewards should not change');
                         expect(destinationAddressBalanceBefore.toString()).to.be.equal(destinationAddressBalanceAfter.toString(), 'destinationAddressBalance should not change');
-                        return [4 /*yield*/, comparatorEngine(['emissionPerSecond', 'index', 'lastUpdateTimestamp'], { underlyingAsset: underlyingAsset, totalStaked: totalStaked }, assetDataBefore, assetDataAfter, actionBlockTimestamp, {})];
+                        return [4 /*yield*/, comparator_engine_1.comparatorEngine(['emissionPerSecond', 'index', 'lastUpdateTimestamp'], { underlyingAsset: underlyingAsset, totalStaked: totalStaked }, assetDataBefore, assetDataAfter, actionBlockTimestamp, {})];
                     case 19:
                         _b.sent();
                         expect(eventsEmitted.length).to.be.equal(0, 'no events should be emitted');
                         return [2 /*return*/];
                     case 20: 
                     // ------- Distribution Manager tests START -----
-                    return [4 /*yield*/, assetDataComparator({ underlyingAsset: underlyingAsset, totalStaked: totalStaked }, assetDataBefore, assetDataAfter, actionBlockTimestamp, distributionEndTimestamp.toNumber(), {})];
+                    return [4 /*yield*/, asset_data_1.assetDataComparator({ underlyingAsset: underlyingAsset, totalStaked: totalStaked }, assetDataBefore, assetDataAfter, actionBlockTimestamp, distributionEndTimestamp.toNumber(), {})];
                     case 21:
                         // ------- Distribution Manager tests START -----
                         _b.sent();
                         expect(userIndexAfter.toString()).to.be.equal(assetDataAfter.index.toString(), 'user index are not correctly updated');
                         if (!assetDataAfter.index.eq(assetDataBefore.index)) {
-                            eventChecker(eventsEmitted[0], 'AssetIndexUpdated', [
+                            comparator_engine_1.eventChecker(eventsEmitted[0], 'AssetIndexUpdated', [
                                 assetDataAfter.underlyingAsset,
                                 assetDataAfter.index,
                             ]);
-                            eventChecker(eventsEmitted[1], 'UserIndexUpdated', [
+                            comparator_engine_1.eventChecker(eventsEmitted[1], 'UserIndexUpdated', [
                                 userAddress,
                                 assetDataAfter.underlyingAsset,
                                 assetDataAfter.index,
@@ -209,11 +211,11 @@ makeSuite('AaveIncentivesController claimRewards tests', function (testEnv) {
                             expect(unclaimedRewardsAfter.toString()).to.be.equal('0', 'unclaimed amount after should go to 0');
                         }
                         else {
-                            expectedClaimedAmount = BigNumber.from(amountToClaim);
+                            expectedClaimedAmount = ethers_1.BigNumber.from(amountToClaim);
                             expect(unclaimedRewardsAfter.toString()).to.be.equal(unclaimedRewardsCalc.sub(amountToClaim).toString(), 'unclaimed rewards after are wrong');
                         }
                         if (toStake) {
-                            expectedClaimedAmount = expectedClaimedAmount.add(expectedClaimedAmount.mul(PSM_STAKER_PREMIUM).div('100'));
+                            expectedClaimedAmount = expectedClaimedAmount.add(expectedClaimedAmount.mul(constants_1.PSM_STAKER_PREMIUM).div('100'));
                         }
                         expect(claimedAmount.toString()).to.be.equal(expectedClaimedAmount.toString(), 'claimed amount are wrong');
                         if (expectedAccruedRewards !== '0') {
@@ -224,13 +226,13 @@ makeSuite('AaveIncentivesController claimRewards tests', function (testEnv) {
                             // Expect event to exist
                             expect(rewardsAccruedEvent).to.be.ok;
                             if (rewardsAccruedEvent) {
-                                eventChecker(rewardsAccruedEvent, 'RewardsAccrued', [
+                                comparator_engine_1.eventChecker(rewardsAccruedEvent, 'RewardsAccrued', [
                                     userAddress,
                                     expectedAccruedRewards,
                                 ]);
                             }
                             else {
-                                fail('missing accrued event');
+                                assert_1.fail('missing accrued event');
                             }
                         }
                         if (expectedClaimedAmount.gt(0)) {
@@ -241,14 +243,14 @@ makeSuite('AaveIncentivesController claimRewards tests', function (testEnv) {
                             // Expect event to exist
                             expect(rewardsClaimedEvent).to.be.ok;
                             if (rewardsClaimedEvent) {
-                                eventChecker(rewardsClaimedEvent, 'RewardsClaimed', [
+                                comparator_engine_1.eventChecker(rewardsClaimedEvent, 'RewardsClaimed', [
                                     userAddress,
                                     destinationAddress,
                                     expectedClaimedAmount,
                                 ]);
                             }
                             else {
-                                fail('missing reward event');
+                                assert_1.fail('missing reward event');
                             }
                         }
                         return [2 /*return*/];

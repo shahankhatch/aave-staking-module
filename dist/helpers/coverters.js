@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,48 +35,53 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { ethers } from 'ethers';
-import BigNumber from 'bignumber.js';
-import { MOCK_ETH_ADDRESS } from './constants';
-import { getIErc20Detailed } from './contracts-accessors';
-export var convertToCurrencyDecimals = function (tokenAddress, amount) { return __awaiter(void 0, void 0, void 0, function () {
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.convertToCurrencyUnits = exports.convertToCurrencyDecimals = void 0;
+var ethers_1 = require("ethers");
+var bignumber_js_1 = __importDefault(require("bignumber.js"));
+var constants_1 = require("./constants");
+var contracts_accessors_1 = require("./contracts-accessors");
+exports.convertToCurrencyDecimals = function (tokenAddress, amount) { return __awaiter(void 0, void 0, void 0, function () {
     var isEth, decimals, token;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                isEth = tokenAddress === MOCK_ETH_ADDRESS;
+                isEth = tokenAddress === constants_1.MOCK_ETH_ADDRESS;
                 decimals = '18';
                 if (!!isEth) return [3 /*break*/, 3];
-                return [4 /*yield*/, getIErc20Detailed({ address: tokenAddress })];
+                return [4 /*yield*/, contracts_accessors_1.getIErc20Detailed({ address: tokenAddress })];
             case 1:
                 token = _a.sent();
                 return [4 /*yield*/, token.decimals()];
             case 2:
                 decimals = (_a.sent()).toString();
                 _a.label = 3;
-            case 3: return [2 /*return*/, ethers.utils.parseUnits(amount, decimals)];
+            case 3: return [2 /*return*/, ethers_1.ethers.utils.parseUnits(amount, decimals)];
         }
     });
 }); };
-export var convertToCurrencyUnits = function (tokenAddress, amount) { return __awaiter(void 0, void 0, void 0, function () {
+exports.convertToCurrencyUnits = function (tokenAddress, amount) { return __awaiter(void 0, void 0, void 0, function () {
     var isEth, decimals, token, _a, currencyUnit, amountInCurrencyUnits;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                isEth = tokenAddress === MOCK_ETH_ADDRESS;
-                decimals = new BigNumber(18);
+                isEth = tokenAddress === constants_1.MOCK_ETH_ADDRESS;
+                decimals = new bignumber_js_1.default(18);
                 if (!!isEth) return [3 /*break*/, 3];
-                return [4 /*yield*/, getIErc20Detailed({ address: tokenAddress })];
+                return [4 /*yield*/, contracts_accessors_1.getIErc20Detailed({ address: tokenAddress })];
             case 1:
                 token = _b.sent();
-                _a = BigNumber.bind;
+                _a = bignumber_js_1.default.bind;
                 return [4 /*yield*/, token.decimals()];
             case 2:
-                decimals = new (_a.apply(BigNumber, [void 0, _b.sent()]))();
+                decimals = new (_a.apply(bignumber_js_1.default, [void 0, _b.sent()]))();
                 _b.label = 3;
             case 3:
-                currencyUnit = new BigNumber(10).pow(decimals);
-                amountInCurrencyUnits = new BigNumber(amount).div(currencyUnit);
+                currencyUnit = new bignumber_js_1.default(10).pow(decimals);
+                amountInCurrencyUnits = new bignumber_js_1.default(amount).div(currencyUnit);
                 return [2 /*return*/, amountInCurrencyUnits.toFixed()];
         }
     });

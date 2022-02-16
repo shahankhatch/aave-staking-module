@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,24 +35,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { timeLatest } from '../../helpers/misc-utils';
+Object.defineProperty(exports, "__esModule", { value: true });
+var misc_utils_1 = require("../../helpers/misc-utils");
 var expect = require('chai').expect;
-import { makeSuite } from '../helpers/make-suite';
-import { deployAaveIncentivesController } from '../../helpers/contracts-accessors';
-import { RANDOM_ADDRESSES } from '../../helpers/constants';
-makeSuite('AaveIncentivesController constructor tests', function () {
+var make_suite_1 = require("../helpers/make-suite");
+var contracts_accessors_1 = require("../../helpers/contracts-accessors");
+var constants_1 = require("../../helpers/constants");
+make_suite_1.makeSuite('AaveIncentivesController constructor tests', function () {
     it('should assign correct params', function () { return __awaiter(void 0, void 0, void 0, function () {
         var peiEmissionManager, rewardToken, rewardsVault, psm, extraPsmReward, distributionDuration, aaveIncentivesController, _a, _b, _c, _d, _e, _f, _g, _h;
         return __generator(this, function (_j) {
             switch (_j.label) {
                 case 0:
-                    peiEmissionManager = RANDOM_ADDRESSES[1];
-                    rewardToken = RANDOM_ADDRESSES[3];
-                    rewardsVault = RANDOM_ADDRESSES[4];
-                    psm = RANDOM_ADDRESSES[5];
+                    peiEmissionManager = constants_1.RANDOM_ADDRESSES[1];
+                    rewardToken = constants_1.RANDOM_ADDRESSES[3];
+                    rewardsVault = constants_1.RANDOM_ADDRESSES[4];
+                    psm = constants_1.RANDOM_ADDRESSES[5];
                     extraPsmReward = '100';
                     distributionDuration = '100';
-                    return [4 /*yield*/, deployAaveIncentivesController([
+                    return [4 /*yield*/, contracts_accessors_1.deployAaveIncentivesController([
                             rewardToken,
                             rewardsVault,
                             psm,
@@ -90,7 +92,7 @@ makeSuite('AaveIncentivesController constructor tests', function () {
                     return [4 /*yield*/, aaveIncentivesController.DISTRIBUTION_END()];
                 case 12:
                     _h = (_f = _g.apply(void 0, [(_j.sent()).toString()]).to.be).equal;
-                    return [4 /*yield*/, timeLatest()];
+                    return [4 /*yield*/, misc_utils_1.timeLatest()];
                 case 13: return [4 /*yield*/, _h.apply(_f, [(_j.sent()).plus(distributionDuration).toString()])];
                 case 14:
                     _j.sent();

@@ -128,6 +128,7 @@ const buildTestEnv = async (deployer: Signer, vaultOfRewards: Signer, restWallet
 before(async () => {
   await rawBRE.run('set-bre');
   const [deployer, rewardsVault, ...restWallets] = await getEthersSigners();
+  console.log("[deployer, rewardsVault, ...restWallets]", [deployer, rewardsVault, ...restWallets])
   console.log('-> Deploying test environment...');
   await buildTestEnv(deployer, rewardsVault, restWallets);
   await initializeMakeSuite();

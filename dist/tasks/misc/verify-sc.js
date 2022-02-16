@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,9 +35,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { task } from '@nomiclabs/buidler/config';
-import { verifyContract, checkVerification } from '../../helpers/etherscan-verification';
-task('verify-sc', 'Inits the BRE, to have access to all the plugins')
+Object.defineProperty(exports, "__esModule", { value: true });
+var config_1 = require("@nomiclabs/buidler/config");
+var etherscan_verification_1 = require("../../helpers/etherscan-verification");
+config_1.task('verify-sc', 'Inits the BRE, to have access to all the plugins')
     .addParam('contractName', 'Name of the Solidity smart contract')
     .addParam('address', 'Ethereum address of the smart contract')
     .addOptionalParam('libraries', 'Stringified JSON object in format of {library1: "0x2956356cd2a2bf3202f771f50d3d14a367b48071"}')
@@ -50,8 +52,8 @@ task('verify-sc', 'Inits the BRE, to have access to all the plugins')
                 case 0: return [4 /*yield*/, localBRE.run('set-bre')];
                 case 1:
                     _c.sent();
-                    checkVerification();
-                    return [4 /*yield*/, verifyContract(contractName, address, constructorArguments, libraries)];
+                    etherscan_verification_1.checkVerification();
+                    return [4 /*yield*/, etherscan_verification_1.verifyContract(contractName, address, constructorArguments, libraries)];
                 case 2:
                     result = _c.sent();
                     return [2 /*return*/, result];

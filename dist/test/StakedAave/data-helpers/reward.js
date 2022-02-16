@@ -1,3 +1,4 @@
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -45,16 +46,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import BigNumber from 'bignumber.js';
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.compareRewardsAtTransfer = exports.compareRewardsAtAction = void 0;
+var bignumber_js_1 = __importDefault(require("bignumber.js"));
 var chai = require('chai');
 var expect = chai.expect, assert = chai.assert;
 var ChaiBigNumber = require('chai-bignumber');
-import { getRewards } from '../../DistributionManager/data-helpers/base-math';
-import { getUserIndex } from '../../DistributionManager/data-helpers/asset-user-data';
-import { eventChecker } from '../../helpers/comparator-engine';
-import { waitForTx, increaseTime } from '../../../helpers/misc-utils';
+var base_math_1 = require("../../DistributionManager/data-helpers/base-math");
+var asset_user_data_1 = require("../../DistributionManager/data-helpers/asset-user-data");
+var comparator_engine_1 = require("../../helpers/comparator-engine");
+var misc_utils_1 = require("../../../helpers/misc-utils");
 chai.use(ChaiBigNumber());
-export var compareRewardsAtAction = function (stakedAave, userAddress, actions, shouldReward, assetConfig) { return __awaiter(void 0, void 0, void 0, function () {
+exports.compareRewardsAtAction = function (stakedAave, userAddress, actions, shouldReward, assetConfig) { return __awaiter(void 0, void 0, void 0, function () {
     var underlyingAsset, rewardsBalanceBefore, _a, assetConfiguration, _b, _c, userBalance, userIndexBefore, receipts, _d, _e, userIndexAfter, rewardsBalanceAfter, _f, expectedAccruedRewards, latestReceipt, eventAccrued;
     var _g;
     return __generator(this, function (_h) {
@@ -62,15 +68,15 @@ export var compareRewardsAtAction = function (stakedAave, userAddress, actions, 
             case 0:
                 underlyingAsset = stakedAave.address;
                 // To prevent coverage to fail, add 5 seconds per comparisson.
-                return [4 /*yield*/, increaseTime(5)];
+                return [4 /*yield*/, misc_utils_1.increaseTime(5)];
             case 1:
                 // To prevent coverage to fail, add 5 seconds per comparisson.
                 _h.sent();
-                _a = BigNumber.bind;
+                _a = bignumber_js_1.default.bind;
                 return [4 /*yield*/, stakedAave.getTotalRewardsBalance(userAddress)];
             case 2: return [4 /*yield*/, (_h.sent()).toString()];
             case 3:
-                rewardsBalanceBefore = new (_a.apply(BigNumber, [void 0, _h.sent()]))();
+                rewardsBalanceBefore = new (_a.apply(bignumber_js_1.default, [void 0, _h.sent()]))();
                 if (!assetConfig) return [3 /*break*/, 4];
                 _b = __assign(__assign({}, assetConfig), { underlyingAsset: underlyingAsset });
                 return [3 /*break*/, 6];
@@ -92,14 +98,14 @@ export var compareRewardsAtAction = function (stakedAave, userAddress, actions, 
                 return [4 /*yield*/, stakedAave.balanceOf(userAddress)];
             case 8:
                 userBalance = _h.sent();
-                return [4 /*yield*/, getUserIndex(stakedAave, userAddress, underlyingAsset)];
+                return [4 /*yield*/, asset_user_data_1.getUserIndex(stakedAave, userAddress, underlyingAsset)];
             case 9:
                 userIndexBefore = _h.sent();
                 _e = (_d = Promise).all;
                 return [4 /*yield*/, actions().map(function (action) { return __awaiter(void 0, void 0, void 0, function () { var _a; return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
-                                _a = waitForTx;
+                                _a = misc_utils_1.waitForTx;
                                 return [4 /*yield*/, action];
                             case 1: return [2 /*return*/, _a.apply(void 0, [_b.sent()])];
                         }
@@ -107,15 +113,15 @@ export var compareRewardsAtAction = function (stakedAave, userAddress, actions, 
             case 10: return [4 /*yield*/, _e.apply(_d, [_h.sent()])];
             case 11:
                 receipts = _h.sent();
-                return [4 /*yield*/, getUserIndex(stakedAave, userAddress, underlyingAsset)];
+                return [4 /*yield*/, asset_user_data_1.getUserIndex(stakedAave, userAddress, underlyingAsset)];
             case 12:
                 userIndexAfter = _h.sent();
-                _f = BigNumber.bind;
+                _f = bignumber_js_1.default.bind;
                 return [4 /*yield*/, stakedAave.getTotalRewardsBalance(userAddress)];
             case 13: return [4 /*yield*/, (_h.sent()).toString()];
             case 14:
-                rewardsBalanceAfter = new (_f.apply(BigNumber, [void 0, _h.sent()]))();
-                expectedAccruedRewards = getRewards(userBalance, userIndexAfter, userIndexBefore);
+                rewardsBalanceAfter = new (_f.apply(bignumber_js_1.default, [void 0, _h.sent()]))();
+                expectedAccruedRewards = base_math_1.getRewards(userBalance, userIndexAfter, userIndexBefore);
                 expect(rewardsBalanceAfter).to.bignumber.eq(rewardsBalanceBefore.plus(expectedAccruedRewards));
                 // Explicit check rewards when the test case expects rewards to the user
                 if (shouldReward) {
@@ -133,7 +139,7 @@ export var compareRewardsAtAction = function (stakedAave, userAddress, actions, 
                         return event === 'RewardsAccrued';
                     });
                     if (eventAccrued) {
-                        eventChecker(eventAccrued, 'RewardsAccrued', [
+                        comparator_engine_1.eventChecker(eventAccrued, 'RewardsAccrued', [
                             userAddress,
                             expectedAccruedRewards.toString(),
                         ]);
@@ -146,13 +152,13 @@ export var compareRewardsAtAction = function (stakedAave, userAddress, actions, 
         }
     });
 }); };
-export var compareRewardsAtTransfer = function (stakedAave, from, to, amount, fromShouldReward, toShouldReward, assetConfig) { return __awaiter(void 0, void 0, void 0, function () {
+exports.compareRewardsAtTransfer = function (stakedAave, from, to, amount, fromShouldReward, toShouldReward, assetConfig) { return __awaiter(void 0, void 0, void 0, function () {
     var fromAddress, toAddress, underlyingAsset, fromSavedBalance, toSavedBalance, fromSavedRewards, _a, toSavedRewards, _b, fromIndexBefore, toIndexBefore, actions, fromIndexAfter, toIndexAfter, fromRewardsBalanceAfter, _c, fromExpectedAccruedRewards, toRewardsBalanceAfter, _d, toExpectedAccruedRewards, fromNewBalance, toNewBalance;
     return __generator(this, function (_e) {
         switch (_e.label) {
             case 0: 
             // Increase time to prevent coverage to fail
-            return [4 /*yield*/, increaseTime(5)];
+            return [4 /*yield*/, misc_utils_1.increaseTime(5)];
             case 1:
                 // Increase time to prevent coverage to fail
                 _e.sent();
@@ -165,47 +171,47 @@ export var compareRewardsAtTransfer = function (stakedAave, from, to, amount, fr
                 return [4 /*yield*/, stakedAave.balanceOf(toAddress)];
             case 3:
                 toSavedBalance = _e.sent();
-                _a = BigNumber.bind;
+                _a = bignumber_js_1.default.bind;
                 return [4 /*yield*/, stakedAave.getTotalRewardsBalance(fromAddress)];
             case 4: return [4 /*yield*/, (_e.sent()).toString()];
             case 5:
-                fromSavedRewards = new (_a.apply(BigNumber, [void 0, _e.sent()]))();
-                _b = BigNumber.bind;
+                fromSavedRewards = new (_a.apply(bignumber_js_1.default, [void 0, _e.sent()]))();
+                _b = bignumber_js_1.default.bind;
                 return [4 /*yield*/, stakedAave.getTotalRewardsBalance(toAddress)];
             case 6: return [4 /*yield*/, (_e.sent()).toString()];
             case 7:
-                toSavedRewards = new (_b.apply(BigNumber, [void 0, _e.sent()]))();
-                return [4 /*yield*/, getUserIndex(stakedAave, fromAddress, underlyingAsset)];
+                toSavedRewards = new (_b.apply(bignumber_js_1.default, [void 0, _e.sent()]))();
+                return [4 /*yield*/, asset_user_data_1.getUserIndex(stakedAave, fromAddress, underlyingAsset)];
             case 8:
                 fromIndexBefore = _e.sent();
-                return [4 /*yield*/, getUserIndex(stakedAave, toAddress, underlyingAsset)];
+                return [4 /*yield*/, asset_user_data_1.getUserIndex(stakedAave, toAddress, underlyingAsset)];
             case 9:
                 toIndexBefore = _e.sent();
                 actions = function () { return [stakedAave.connect(from.signer).transfer(toAddress, amount)]; };
                 // Fire reward comparator
-                return [4 /*yield*/, compareRewardsAtAction(stakedAave, fromAddress, actions, fromShouldReward, assetConfig)];
+                return [4 /*yield*/, exports.compareRewardsAtAction(stakedAave, fromAddress, actions, fromShouldReward, assetConfig)];
             case 10:
                 // Fire reward comparator
                 _e.sent();
-                return [4 /*yield*/, getUserIndex(stakedAave, fromAddress, underlyingAsset)];
+                return [4 /*yield*/, asset_user_data_1.getUserIndex(stakedAave, fromAddress, underlyingAsset)];
             case 11:
                 fromIndexAfter = _e.sent();
-                return [4 /*yield*/, getUserIndex(stakedAave, toAddress, underlyingAsset)];
+                return [4 /*yield*/, asset_user_data_1.getUserIndex(stakedAave, toAddress, underlyingAsset)];
             case 12:
                 toIndexAfter = _e.sent();
-                _c = BigNumber.bind;
+                _c = bignumber_js_1.default.bind;
                 return [4 /*yield*/, stakedAave.getTotalRewardsBalance(fromAddress)];
             case 13: return [4 /*yield*/, (_e.sent()).toString()];
             case 14:
-                fromRewardsBalanceAfter = new (_c.apply(BigNumber, [void 0, _e.sent()]))();
-                fromExpectedAccruedRewards = getRewards(fromSavedBalance, fromIndexAfter, fromIndexBefore);
+                fromRewardsBalanceAfter = new (_c.apply(bignumber_js_1.default, [void 0, _e.sent()]))();
+                fromExpectedAccruedRewards = base_math_1.getRewards(fromSavedBalance, fromIndexAfter, fromIndexBefore);
                 expect(fromRewardsBalanceAfter).to.bignumber.eq(fromSavedRewards.plus(fromExpectedAccruedRewards));
-                _d = BigNumber.bind;
+                _d = bignumber_js_1.default.bind;
                 return [4 /*yield*/, stakedAave.getTotalRewardsBalance(toAddress)];
             case 15: return [4 /*yield*/, (_e.sent()).toString()];
             case 16:
-                toRewardsBalanceAfter = new (_d.apply(BigNumber, [void 0, _e.sent()]))();
-                toExpectedAccruedRewards = getRewards(toSavedBalance, toIndexAfter, toIndexBefore);
+                toRewardsBalanceAfter = new (_d.apply(bignumber_js_1.default, [void 0, _e.sent()]))();
+                toExpectedAccruedRewards = base_math_1.getRewards(toSavedBalance, toIndexAfter, toIndexBefore);
                 expect(toRewardsBalanceAfter).to.bignumber.eq(toSavedRewards.plus(toExpectedAccruedRewards));
                 // Explicit check rewards when the test case expects rewards to the user
                 if (fromShouldReward) {

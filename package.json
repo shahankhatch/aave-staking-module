@@ -8,7 +8,7 @@
     "buidler-kovan": "buidler --network kovan",
     "buidler-ropsten": "buidler --network ropsten",
     "buidler-main": "buidler --network main",
-    "buidler-localhost": "buidler --network localhost",
+    "buidler-localhost": "buidler --network localhost initialize-StakedAave",
     "buidler help": "buidler help",
     "compile": "buidler compile",
     "hardhat-compile": "hardhat compile",

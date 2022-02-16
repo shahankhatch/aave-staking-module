@@ -1,3 +1,4 @@
+"use strict";
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -65,9 +66,11 @@ var __spread = (this && this.__spread) || function () {
     for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
     return ar;
 };
-import { comparatorEngine } from '../../helpers/comparator-engine';
-import { getNormalizedDistribution } from '../../helpers/ray-math';
-export function getAssetsData(peiContract, assets) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.assetDataComparator = exports.getAssetsData = void 0;
+var comparator_engine_1 = require("../../helpers/comparator-engine");
+var ray_math_1 = require("../../helpers/ray-math");
+function getAssetsData(peiContract, assets) {
     return __awaiter(this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
@@ -91,9 +94,10 @@ export function getAssetsData(peiContract, assets) {
         });
     });
 }
-export function assetDataComparator(assetConfigUpdateInput, assetConfigBefore, assetConfigAfter, actionBlockTimestamp, emissionEndTimestamp, compareRules) {
+exports.getAssetsData = getAssetsData;
+function assetDataComparator(assetConfigUpdateInput, assetConfigBefore, assetConfigAfter, actionBlockTimestamp, emissionEndTimestamp, compareRules) {
     var _this = this;
-    return comparatorEngine(['emissionPerSecond', 'index', 'lastUpdateTimestamp'], assetConfigUpdateInput, assetConfigBefore, assetConfigAfter, actionBlockTimestamp, __assign(__assign({}, compareRules), { fieldsWithCustomLogic: __spread([
+    return comparator_engine_1.comparatorEngine(['emissionPerSecond', 'index', 'lastUpdateTimestamp'], assetConfigUpdateInput, assetConfigBefore, assetConfigAfter, actionBlockTimestamp, __assign(__assign({}, compareRules), { fieldsWithCustomLogic: __spread([
             // should happen on any update
             {
                 fieldName: 'lastUpdateTimestamp',
@@ -103,10 +107,11 @@ export function assetDataComparator(assetConfigUpdateInput, assetConfigBefore, a
                 fieldName: 'index',
                 logic: function (stateUpdate, stateBefore, stateAfter, txTimestamp) { return __awaiter(_this, void 0, void 0, function () {
                     return __generator(this, function (_a) {
-                        return [2 /*return*/, getNormalizedDistribution(stateUpdate.totalStaked.toString(), stateBefore.index, stateBefore.emissionPerSecond, stateBefore.lastUpdateTimestamp, txTimestamp, emissionEndTimestamp).toString(10)];
+                        return [2 /*return*/, ray_math_1.getNormalizedDistribution(stateUpdate.totalStaked.toString(), stateBefore.index, stateBefore.emissionPerSecond, stateBefore.lastUpdateTimestamp, txTimestamp, emissionEndTimestamp).toString(10)];
                     });
                 }); },
             }
         ], (compareRules.fieldsWithCustomLogic || [])) }));
 }
+exports.assetDataComparator = assetDataComparator;
 //# sourceMappingURL=asset-data.js.map

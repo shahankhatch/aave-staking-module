@@ -19,8 +19,8 @@ usePlugin('solidity-coverage');
 });
 
 export const BUIDLEREVM_CHAIN_ID = 31337;
-const DEFAULT_BLOCK_GAS_LIMIT = 12500000;
-const DEFAULT_GAS_PRICE = 50000000000; // 50 gwei
+const DEFAULT_BLOCK_GAS_LIMIT = 5500000;
+const DEFAULT_GAS_PRICE = 50000; // 50 gwei
 const HARDFORK = 'istanbul';
 const INFURA_KEY = process.env.INFURA_KEY || '';
 const ETHERSCAN_KEY = process.env.ETHERSCAN_KEY || '';
@@ -60,6 +60,7 @@ const config = {
     etherscan: {
         apiKey: ETHERSCAN_KEY,
     },
+    // defaultNetwork: 'ganache',
     defaultNetwork: 'localhost',
     // defaultNetwork: 'buidlerevm',
     mocha: {
@@ -72,7 +73,7 @@ const config = {
         buidlerevm: {
             hardfork: 'istanbul',
             blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
-            gas: 2000000,
+            gas: DEFAULT_BLOCK_GAS_LIMIT,
             gasPrice: DEFAULT_GAS_PRICE,
             chainId: BUIDLEREVM_CHAIN_ID,
             throwOnTransactionFailures: true,
@@ -84,13 +85,17 @@ const config = {
             })),
         },
         ganache: {
-            url: 'http://ganache:8545',
+            url: 'http://127.0.0.1:8545',
             accounts: {
                 mnemonic: 'fox sight canyon orphan hotel grow hedgehog build bless august weather swarm',
                 path: "m/44'/60'/0'/0",
                 initialIndex: 0,
                 count: 20,
             },
+            // gas: DEFAULT_BLOCK_GAS_LIMIT,
+            // gasPrice: DEFAULT_GAS_PRICE,
+            // chainId: 1337
+            chainId: BUIDLEREVM_CHAIN_ID
         },
         coverage: {
             url: 'http://localhost:8555',

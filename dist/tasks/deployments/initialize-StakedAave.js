@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,13 +35,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { task } from '@nomiclabs/buidler/config';
-import { eContractid } from '../../helpers/types';
-import { waitForTx } from '../../helpers/misc-utils';
-import { ZERO_ADDRESS, STAKED_AAVE_NAME, STAKED_AAVE_SYMBOL, STAKED_AAVE_DECIMALS, } from '../../helpers/constants';
-import { getStakedAaveImpl, getStakedAaveProxy, } from '../../helpers/contracts-accessors';
-var StakedAave = eContractid.StakedAave;
-task("initialize-" + StakedAave, "Initialize the " + StakedAave + " proxy contract")
+Object.defineProperty(exports, "__esModule", { value: true });
+var config_1 = require("@nomiclabs/buidler/config");
+var types_1 = require("../../helpers/types");
+var misc_utils_1 = require("../../helpers/misc-utils");
+var constants_1 = require("../../helpers/constants");
+var contracts_accessors_1 = require("../../helpers/contracts-accessors");
+var StakedAave = types_1.eContractid.StakedAave;
+config_1.task("initialize-" + StakedAave, "Initialize the " + StakedAave + " proxy contract")
     .addParam('admin', "The address to be added as an Admin role in " + StakedAave + " Transparent Proxy.")
     .setAction(function (_a, localBRE) {
     var aaveAdmin = _a.admin;
@@ -58,20 +60,20 @@ task("initialize-" + StakedAave, "Initialize the " + StakedAave + " proxy contra
                         throw new Error('INVALID_CHAIN_ID');
                     }
                     console.log("\n- " + StakedAave + " initialization");
-                    return [4 /*yield*/, getStakedAaveImpl()];
+                    return [4 /*yield*/, contracts_accessors_1.getStakedAaveImpl()];
                 case 2:
                     stakedAaveImpl = _c.sent();
-                    return [4 /*yield*/, getStakedAaveProxy()];
+                    return [4 /*yield*/, contracts_accessors_1.getStakedAaveProxy()];
                 case 3:
                     stakedAaveProxy = _c.sent();
                     console.log('\tInitializing StakedAave');
                     encodedInitializeStakedAave = stakedAaveImpl.interface.encodeFunctionData('initialize', [
-                        ZERO_ADDRESS,
-                        STAKED_AAVE_NAME,
-                        STAKED_AAVE_SYMBOL,
-                        STAKED_AAVE_DECIMALS,
+                        constants_1.ZERO_ADDRESS,
+                        constants_1.STAKED_AAVE_NAME,
+                        constants_1.STAKED_AAVE_SYMBOL,
+                        constants_1.STAKED_AAVE_DECIMALS,
                     ]);
-                    _b = waitForTx;
+                    _b = misc_utils_1.waitForTx;
                     return [4 /*yield*/, stakedAaveProxy.functions['initialize(address,address,bytes)'](stakedAaveImpl.address, aaveAdmin, encodedInitializeStakedAave)];
                 case 4: return [4 /*yield*/, _b.apply(void 0, [_c.sent()])];
                 case 5:

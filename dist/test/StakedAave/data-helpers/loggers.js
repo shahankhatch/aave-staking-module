@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,7 +35,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-export var logAaveTokenBalanceOf = function (account, aaveToken) { return __awaiter(void 0, void 0, void 0, function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.logRewardPerStakedAave = exports.logGetStakeTotalRewardsBalance = exports.logStakedAaveBalanceOf = exports.logAaveTokenBalanceOf = void 0;
+exports.logAaveTokenBalanceOf = function (account, aaveToken) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, _b, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
@@ -48,7 +51,7 @@ export var logAaveTokenBalanceOf = function (account, aaveToken) { return __awai
         }
     });
 }); };
-export var logStakedAaveBalanceOf = function (staker, stakedAave) { return __awaiter(void 0, void 0, void 0, function () {
+exports.logStakedAaveBalanceOf = function (staker, stakedAave) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, _b, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
@@ -62,7 +65,7 @@ export var logStakedAaveBalanceOf = function (staker, stakedAave) { return __awa
         }
     });
 }); };
-export var logGetStakeTotalRewardsBalance = function (staker, stakedAave) { return __awaiter(void 0, void 0, void 0, function () {
+exports.logGetStakeTotalRewardsBalance = function (staker, stakedAave) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, _b, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {
@@ -76,7 +79,7 @@ export var logGetStakeTotalRewardsBalance = function (staker, stakedAave) { retu
         }
     });
 }); };
-export var logRewardPerStakedAave = function (stakedAave) { return __awaiter(void 0, void 0, void 0, function () {
+exports.logRewardPerStakedAave = function (stakedAave) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, _b, _c;
     return __generator(this, function (_d) {
         switch (_d.label) {

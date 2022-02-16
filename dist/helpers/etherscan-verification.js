@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -54,16 +55,21 @@ var __spread = (this && this.__spread) || function () {
     for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
     return ar;
 };
-import { exit } from 'process';
-import fs from 'fs';
-import { file } from 'tmp-promise';
-import { BRE } from './misc-utils';
-export var SUPPORTED_ETHERSCAN_NETWORKS = ['main', 'ropsten', 'kovan'];
-export var getEtherscanPath = function (contractName) { return __awaiter(void 0, void 0, void 0, function () {
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.checkVerification = exports.runTaskWithRetry = exports.verifyContract = exports.getEtherscanPath = exports.SUPPORTED_ETHERSCAN_NETWORKS = void 0;
+var process_1 = require("process");
+var fs_1 = __importDefault(require("fs"));
+var tmp_promise_1 = require("tmp-promise");
+var misc_utils_1 = require("./misc-utils");
+exports.SUPPORTED_ETHERSCAN_NETWORKS = ['main', 'ropsten', 'kovan'];
+exports.getEtherscanPath = function (contractName) { return __awaiter(void 0, void 0, void 0, function () {
     var compilerInput, paths, path;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, BRE.run('compile:get-compiler-input')];
+            case 0: return [4 /*yield*/, misc_utils_1.BRE.run('compile:get-compiler-input')];
             case 1:
                 compilerInput = _a.sent();
                 paths = Object.keys(compilerInput.sources);
@@ -78,19 +84,19 @@ export var getEtherscanPath = function (contractName) { return __awaiter(void 0,
 function delay(ms) {
     return new Promise(function (resolve) { return setTimeout(resolve, ms); });
 }
-export var verifyContract = function (contractName, address, constructorArguments, libraries) { return __awaiter(void 0, void 0, void 0, function () {
+exports.verifyContract = function (contractName, address, constructorArguments, libraries) { return __awaiter(void 0, void 0, void 0, function () {
     var currentNetwork, etherscanPath, msDelay, times, _a, fd, path, cleanup, params, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                currentNetwork = BRE.network.name;
+                currentNetwork = misc_utils_1.BRE.network.name;
                 if (!process.env.ETHERSCAN_KEY) {
                     throw Error('Missing process.env.ETHERSCAN_KEY.');
                 }
-                if (!SUPPORTED_ETHERSCAN_NETWORKS.includes(currentNetwork)) {
-                    throw Error("Current network " + currentNetwork + " not supported. Please change to one of the next networks: " + SUPPORTED_ETHERSCAN_NETWORKS.toString());
+                if (!exports.SUPPORTED_ETHERSCAN_NETWORKS.includes(currentNetwork)) {
+                    throw Error("Current network " + currentNetwork + " not supported. Please change to one of the next networks: " + exports.SUPPORTED_ETHERSCAN_NETWORKS.toString());
                 }
-                return [4 /*yield*/, getEtherscanPath(contractName)];
+                return [4 /*yield*/, exports.getEtherscanPath(contractName)];
             case 1:
                 etherscanPath = _b.sent();
                 _b.label = 2;
@@ -99,20 +105,20 @@ export var verifyContract = function (contractName, address, constructorArgument
                 console.log('[ETHERSCAN][WARNING] Delaying Etherscan verification due their API can not find newly deployed contracts');
                 msDelay = 3000;
                 times = 60;
-                return [4 /*yield*/, file({
+                return [4 /*yield*/, tmp_promise_1.file({
                         prefix: 'verify-params-',
                         postfix: '.js',
                     })];
             case 3:
                 _a = _b.sent(), fd = _a.fd, path = _a.path, cleanup = _a.cleanup;
-                fs.writeSync(fd, "module.exports = " + JSON.stringify(__spread(constructorArguments)) + ";");
+                fs_1.default.writeSync(fd, "module.exports = " + JSON.stringify(__spread(constructorArguments)) + ";");
                 params = {
                     contractName: etherscanPath,
                     address: address,
                     libraries: libraries,
                     constructorArgs: path,
                 };
-                return [4 /*yield*/, runTaskWithRetry('verify', params, times, msDelay, cleanup)];
+                return [4 /*yield*/, exports.runTaskWithRetry('verify', params, times, msDelay, cleanup)];
             case 4:
                 _b.sent();
                 return [3 /*break*/, 6];
@@ -123,7 +129,7 @@ export var verifyContract = function (contractName, address, constructorArgument
         }
     });
 }); };
-export var runTaskWithRetry = function (task, params, times, msDelay, cleanup) { return __awaiter(void 0, void 0, void 0, function () {
+exports.runTaskWithRetry = function (task, params, times, msDelay, cleanup) { return __awaiter(void 0, void 0, void 0, function () {
     var counter, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -136,7 +142,7 @@ export var runTaskWithRetry = function (task, params, times, msDelay, cleanup) {
             case 2:
                 _a.trys.push([2, 6, , 8]);
                 if (!times) return [3 /*break*/, 4];
-                return [4 /*yield*/, BRE.run(task, params)];
+                return [4 /*yield*/, misc_utils_1.BRE.run(task, params)];
             case 3:
                 _a.sent();
                 cleanup();
@@ -151,7 +157,7 @@ export var runTaskWithRetry = function (task, params, times, msDelay, cleanup) {
                 counter--;
                 console.info("[INFO] Retrying attemps: " + counter + ".");
                 console.error('[ERROR]', error_2.message);
-                return [4 /*yield*/, runTaskWithRetry(task, params, counter, msDelay, cleanup)];
+                return [4 /*yield*/, exports.runTaskWithRetry(task, params, counter, msDelay, cleanup)];
             case 7:
                 _a.sent();
                 return [3 /*break*/, 8];
@@ -159,15 +165,15 @@ export var runTaskWithRetry = function (task, params, times, msDelay, cleanup) {
         }
     });
 }); };
-export var checkVerification = function () {
-    var currentNetwork = BRE.network.name;
+exports.checkVerification = function () {
+    var currentNetwork = misc_utils_1.BRE.network.name;
     if (!process.env.ETHERSCAN_KEY) {
         console.error('Missing process.env.ETHERSCAN_KEY.');
-        exit(3);
+        process_1.exit(3);
     }
-    if (!SUPPORTED_ETHERSCAN_NETWORKS.includes(currentNetwork)) {
-        console.error("Current network " + currentNetwork + " not supported. Please change to one of the next networks: " + SUPPORTED_ETHERSCAN_NETWORKS.toString());
-        exit(5);
+    if (!exports.SUPPORTED_ETHERSCAN_NETWORKS.includes(currentNetwork)) {
+        console.error("Current network " + currentNetwork + " not supported. Please change to one of the next networks: " + exports.SUPPORTED_ETHERSCAN_NETWORKS.toString());
+        process_1.exit(5);
     }
 };
 //# sourceMappingURL=etherscan-verification.js.map

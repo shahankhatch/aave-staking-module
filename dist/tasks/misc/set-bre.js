@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,12 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { task } from '@nomiclabs/buidler/config';
-import { setBRE } from '../../helpers/misc-utils';
-task("set-bre", "Inits the BRE, to have access to all the plugins' objects").setAction(function (_, _BRE) { return __awaiter(void 0, void 0, void 0, function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var config_1 = require("@nomiclabs/buidler/config");
+var misc_utils_1 = require("../../helpers/misc-utils");
+config_1.task("set-bre", "Inits the BRE, to have access to all the plugins' objects").setAction(function (_, _BRE) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, setBRE(_BRE)];
+            case 0: return [4 /*yield*/, misc_utils_1.setBRE(_BRE)];
             case 1:
                 _a.sent();
                 return [2 /*return*/, _BRE];

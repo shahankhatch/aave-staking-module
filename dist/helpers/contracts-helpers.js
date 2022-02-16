@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -65,14 +66,16 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
-import { utils } from 'ethers';
-import { BRE, getDb } from './misc-utils';
-export var registerContractInJsonDb = function (contractId, contractInstance) { return __awaiter(void 0, void 0, void 0, function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getContract = exports.getContractFactory = exports.deployContract = exports.decodeAbiNumber = exports.getBlockTimestamp = exports.getCurrentBlock = exports.getEthersSignersAddresses = exports.getEthersSigners = exports.insertContractAddressInDb = exports.registerContractInJsonDb = void 0;
+var ethers_1 = require("ethers");
+var misc_utils_1 = require("./misc-utils");
+exports.registerContractInJsonDb = function (contractId, contractInstance) { return __awaiter(void 0, void 0, void 0, function () {
     var currentNetwork;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                currentNetwork = BRE.network.name;
+                currentNetwork = misc_utils_1.BRE.network.name;
                 if (currentNetwork !== 'buidlerevm' && currentNetwork !== 'soliditycoverage') {
                     console.log("*** " + contractId + " ***\n");
                     console.log("Network: " + currentNetwork);
@@ -84,7 +87,7 @@ export var registerContractInJsonDb = function (contractId, contractInstance) { 
                     console.log("\n******");
                     console.log();
                 }
-                return [4 /*yield*/, getDb()
+                return [4 /*yield*/, misc_utils_1.getDb()
                         .set(contractId + "." + currentNetwork, {
                         address: contractInstance.address,
                         deployer: contractInstance.deployTransaction.from,
@@ -96,11 +99,11 @@ export var registerContractInJsonDb = function (contractId, contractInstance) { 
         }
     });
 }); };
-export var insertContractAddressInDb = function (id, address) { return __awaiter(void 0, void 0, void 0, function () {
+exports.insertContractAddressInDb = function (id, address) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, getDb()
-                    .set(id + "." + BRE.network.name, {
+            case 0: return [4 /*yield*/, misc_utils_1.getDb()
+                    .set(id + "." + misc_utils_1.BRE.network.name, {
                     address: address,
                 })
                     .write()];
@@ -108,30 +111,30 @@ export var insertContractAddressInDb = function (id, address) { return __awaiter
         }
     });
 }); };
-export var getEthersSigners = function () { return __awaiter(void 0, void 0, void 0, function () { var _a, _b; return __generator(this, function (_c) {
+exports.getEthersSigners = function () { return __awaiter(void 0, void 0, void 0, function () { var _a, _b; return __generator(this, function (_c) {
     switch (_c.label) {
         case 0:
             _b = (_a = Promise).all;
-            return [4 /*yield*/, BRE.ethers.getSigners()];
+            return [4 /*yield*/, misc_utils_1.BRE.ethers.getSigners()];
         case 1: return [4 /*yield*/, _b.apply(_a, [_c.sent()])];
         case 2: return [2 /*return*/, _c.sent()];
     }
 }); }); };
-export var getEthersSignersAddresses = function () { return __awaiter(void 0, void 0, void 0, function () { var _a, _b; return __generator(this, function (_c) {
+exports.getEthersSignersAddresses = function () { return __awaiter(void 0, void 0, void 0, function () { var _a, _b; return __generator(this, function (_c) {
     switch (_c.label) {
         case 0:
             _b = (_a = Promise).all;
-            return [4 /*yield*/, BRE.ethers.getSigners()];
+            return [4 /*yield*/, misc_utils_1.BRE.ethers.getSigners()];
         case 1: return [4 /*yield*/, _b.apply(_a, [(_c.sent()).map(function (signer) { return signer.getAddress(); })])];
         case 2: return [2 /*return*/, _c.sent()];
     }
 }); }); };
-export var getCurrentBlock = function () { return __awaiter(void 0, void 0, void 0, function () {
+exports.getCurrentBlock = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        return [2 /*return*/, BRE.ethers.provider.getBlockNumber()];
+        return [2 /*return*/, misc_utils_1.BRE.ethers.provider.getBlockNumber()];
     });
 }); };
-export var getBlockTimestamp = function (blockNumber) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getBlockTimestamp = function (blockNumber) { return __awaiter(void 0, void 0, void 0, function () {
     var block;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -139,28 +142,28 @@ export var getBlockTimestamp = function (blockNumber) { return __awaiter(void 0,
                 if (!blockNumber) {
                     throw new Error('No block number passed');
                 }
-                return [4 /*yield*/, BRE.ethers.provider.getBlock(blockNumber)];
+                return [4 /*yield*/, misc_utils_1.BRE.ethers.provider.getBlock(blockNumber)];
             case 1:
                 block = _a.sent();
                 return [2 /*return*/, block.timestamp];
         }
     });
 }); };
-export var decodeAbiNumber = function (data) {
-    return parseInt(utils.defaultAbiCoder.decode(['uint256'], data).toString());
+exports.decodeAbiNumber = function (data) {
+    return parseInt(ethers_1.utils.defaultAbiCoder.decode(['uint256'], data).toString());
 };
-export var deployContract = function (contractName, args, slug) {
+exports.deployContract = function (contractName, args, slug) {
     if (slug === void 0) { slug = ''; }
     return __awaiter(void 0, void 0, void 0, function () {
         var contract;
         var _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
-                case 0: return [4 /*yield*/, BRE.ethers.getContractFactory(contractName)];
+                case 0: return [4 /*yield*/, misc_utils_1.BRE.ethers.getContractFactory(contractName)];
                 case 1: return [4 /*yield*/, (_a = (_b.sent())).deploy.apply(_a, __spread(args))];
                 case 2:
                     contract = (_b.sent());
-                    return [4 /*yield*/, registerContractInJsonDb("" + contractName + (slug ? "-" + slug : ''), contract)];
+                    return [4 /*yield*/, exports.registerContractInJsonDb("" + contractName + (slug ? "-" + slug : ''), contract)];
                 case 3:
                     _b.sent();
                     return [2 /*return*/, contract];
@@ -168,7 +171,7 @@ export var deployContract = function (contractName, args, slug) {
         });
     });
 };
-export var getContractFactory = function (contractName) { return function (contractGetter) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getContractFactory = function (contractName) { return function (contractGetter) { return __awaiter(void 0, void 0, void 0, function () {
     var deployedContract, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -178,16 +181,16 @@ export var getContractFactory = function (contractName) { return function (contr
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, getDb()
-                        .get("" + contractName + ((contractGetter === null || contractGetter === void 0 ? void 0 : contractGetter.slug) ? "-" + contractGetter.slug : '') + "." + BRE.network.name)
+                return [4 /*yield*/, misc_utils_1.getDb()
+                        .get("" + contractName + ((contractGetter === null || contractGetter === void 0 ? void 0 : contractGetter.slug) ? "-" + contractGetter.slug : '') + "." + misc_utils_1.BRE.network.name)
                         .value()];
             case 2:
                 deployedContract = (_a.sent()).address;
                 return [3 /*break*/, 4];
             case 3:
                 e_1 = _a.sent();
-                throw new Error("Contract " + contractName + " was not deployed on " + BRE.network.name + " or not stored in DB");
-            case 4: return [4 /*yield*/, BRE.ethers.getContractAt(contractName, (contractGetter === null || contractGetter === void 0 ? void 0 : contractGetter.address) || deployedContract)];
+                throw new Error("Contract " + contractName + " was not deployed on " + misc_utils_1.BRE.network.name + " or not stored in DB");
+            case 4: return [4 /*yield*/, misc_utils_1.BRE.ethers.getContractAt(contractName, (contractGetter === null || contractGetter === void 0 ? void 0 : contractGetter.address) || deployedContract)];
             case 5: return [2 /*return*/, (_a.sent())];
         }
     });
@@ -241,9 +244,9 @@ var linkBytecode = function (artifact, libraries) {
     }
     return bytecode;
 };
-export var getContract = function (contractName, address) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+exports.getContract = function (contractName, address) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     switch (_a.label) {
-        case 0: return [4 /*yield*/, BRE.ethers.getContractAt(contractName, address)];
+        case 0: return [4 /*yield*/, misc_utils_1.BRE.ethers.getContractAt(contractName, address)];
         case 1: return [2 /*return*/, (_a.sent())];
     }
 }); }); };

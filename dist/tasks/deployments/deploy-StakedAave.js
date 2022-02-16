@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,14 +35,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { task } from '@nomiclabs/buidler/config';
-import { eContractid } from '../../helpers/types';
-import { registerContractInJsonDb } from '../../helpers/contracts-helpers';
-import { getAaveTokenPerNetwork, getCooldownSecondsPerNetwork, getUnstakeWindowPerNetwork, getAaveAdminPerNetwork, getDistributionDurationPerNetwork, getAaveIncentivesVaultPerNetwork, } from '../../helpers/constants';
-import { deployStakedAave, deployInitializableAdminUpgradeabilityProxy, } from '../../helpers/contracts-accessors';
-import { checkVerification } from '../../helpers/etherscan-verification';
-var StakedAave = eContractid.StakedAave, StakedAaveImpl = eContractid.StakedAaveImpl;
-task("deploy-" + StakedAave, "Deploys the " + StakedAave + " contract")
+Object.defineProperty(exports, "__esModule", { value: true });
+var config_1 = require("@nomiclabs/buidler/config");
+var types_1 = require("../../helpers/types");
+var contracts_helpers_1 = require("../../helpers/contracts-helpers");
+var constants_1 = require("../../helpers/constants");
+var contracts_accessors_1 = require("../../helpers/contracts-accessors");
+var etherscan_verification_1 = require("../../helpers/etherscan-verification");
+var StakedAave = types_1.eContractid.StakedAave, StakedAaveImpl = types_1.eContractid.StakedAaveImpl;
+config_1.task("deploy-" + StakedAave, "Deploys the " + StakedAave + " contract")
     .addFlag('verify', 'Verify StakedAave contract via Etherscan API.')
     .addOptionalParam('vaultAddress', 'Use AaveIncentivesVault address by param instead of configuration.')
     .addOptionalParam('aaveAddress', 'Use AaveToken address by param instead of configuration.')
@@ -56,7 +58,7 @@ task("deploy-" + StakedAave, "Deploys the " + StakedAave + " contract")
                     _b.sent();
                     // If Etherscan verification is enabled, check needed enviroments to prevent loss of gas in failed deployments.
                     if (verify) {
-                        checkVerification();
+                        etherscan_verification_1.checkVerification();
                     }
                     if (!localBRE.network.config.chainId) {
                         throw new Error('INVALID_CHAIN_ID');
@@ -64,14 +66,14 @@ task("deploy-" + StakedAave, "Deploys the " + StakedAave + " contract")
                     network = localBRE.network.name;
                     console.log("\n- " + StakedAave + " deployment");
                     console.log("\tDeploying " + StakedAave + " implementation ...");
-                    return [4 /*yield*/, deployStakedAave([
-                            aaveAddress || getAaveTokenPerNetwork(network),
-                            aaveAddress || getAaveTokenPerNetwork(network),
-                            getCooldownSecondsPerNetwork(network),
-                            getUnstakeWindowPerNetwork(network),
-                            vaultAddress || getAaveIncentivesVaultPerNetwork(network),
-                            getAaveAdminPerNetwork(network),
-                            getDistributionDurationPerNetwork(network),
+                    return [4 /*yield*/, contracts_accessors_1.deployStakedAave([
+                            aaveAddress || constants_1.getAaveTokenPerNetwork(network),
+                            aaveAddress || constants_1.getAaveTokenPerNetwork(network),
+                            constants_1.getCooldownSecondsPerNetwork(network),
+                            constants_1.getUnstakeWindowPerNetwork(network),
+                            vaultAddress || constants_1.getAaveIncentivesVaultPerNetwork(network),
+                            constants_1.getAaveAdminPerNetwork(network),
+                            constants_1.getDistributionDurationPerNetwork(network),
                         ], false // disable verify due not supported by current buidler etherscan plugin
                         )];
                 case 2:
@@ -79,14 +81,14 @@ task("deploy-" + StakedAave, "Deploys the " + StakedAave + " contract")
                     return [4 /*yield*/, stakedAaveImpl.deployTransaction.wait()];
                 case 3:
                     _b.sent();
-                    return [4 /*yield*/, registerContractInJsonDb(StakedAaveImpl, stakedAaveImpl)];
+                    return [4 /*yield*/, contracts_helpers_1.registerContractInJsonDb(StakedAaveImpl, stakedAaveImpl)];
                 case 4:
                     _b.sent();
                     console.log("\tDeploying " + StakedAave + " Transparent Proxy ...");
-                    return [4 /*yield*/, deployInitializableAdminUpgradeabilityProxy(verify)];
+                    return [4 /*yield*/, contracts_accessors_1.deployInitializableAdminUpgradeabilityProxy(verify)];
                 case 5:
                     stakedAaveProxy = _b.sent();
-                    return [4 /*yield*/, registerContractInJsonDb(StakedAave, stakedAaveProxy)];
+                    return [4 /*yield*/, contracts_helpers_1.registerContractInJsonDb(StakedAave, stakedAaveProxy)];
                 case 6:
                     _b.sent();
                     console.log("\tFinished " + StakedAave + " proxy and implementation deployment");

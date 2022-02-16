@@ -1,34 +1,43 @@
-import { valueToZDBigNumber } from './bignumber';
-export var WAD = valueToZDBigNumber(10).pow(18);
-export var HALF_WAD = WAD.dividedBy(2);
-export var RAY = valueToZDBigNumber(10).pow(27);
-export var HALF_RAY = RAY.dividedBy(2);
-export var WAD_RAY_RATIO = valueToZDBigNumber(10).pow(9);
-export function wadMul(a, b) {
-    return HALF_WAD.plus(valueToZDBigNumber(a).multipliedBy(b.toString())).div(WAD);
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.rayToDecimal = exports.rayPow = exports.wadToRay = exports.rayToWad = exports.rayDiv = exports.rayMul = exports.wadDiv = exports.wadMul = exports.WAD_RAY_RATIO = exports.HALF_RAY = exports.RAY = exports.HALF_WAD = exports.WAD = void 0;
+var bignumber_1 = require("./bignumber");
+exports.WAD = bignumber_1.valueToZDBigNumber(10).pow(18);
+exports.HALF_WAD = exports.WAD.dividedBy(2);
+exports.RAY = bignumber_1.valueToZDBigNumber(10).pow(27);
+exports.HALF_RAY = exports.RAY.dividedBy(2);
+exports.WAD_RAY_RATIO = bignumber_1.valueToZDBigNumber(10).pow(9);
+function wadMul(a, b) {
+    return exports.HALF_WAD.plus(bignumber_1.valueToZDBigNumber(a).multipliedBy(b.toString())).div(exports.WAD);
 }
-export function wadDiv(a, b) {
-    var halfB = valueToZDBigNumber(b).div(2);
-    return halfB.plus(valueToZDBigNumber(a).multipliedBy(WAD)).div(b.toString());
+exports.wadMul = wadMul;
+function wadDiv(a, b) {
+    var halfB = bignumber_1.valueToZDBigNumber(b).div(2);
+    return halfB.plus(bignumber_1.valueToZDBigNumber(a).multipliedBy(exports.WAD)).div(b.toString());
 }
-export function rayMul(a, b) {
-    return HALF_RAY.plus(valueToZDBigNumber(a).multipliedBy(b.toString())).div(RAY);
+exports.wadDiv = wadDiv;
+function rayMul(a, b) {
+    return exports.HALF_RAY.plus(bignumber_1.valueToZDBigNumber(a).multipliedBy(b.toString())).div(exports.RAY);
 }
-export function rayDiv(a, b) {
-    var halfB = valueToZDBigNumber(b).div(2);
-    return halfB.plus(valueToZDBigNumber(a).multipliedBy(RAY)).div(b.toString());
+exports.rayMul = rayMul;
+function rayDiv(a, b) {
+    var halfB = bignumber_1.valueToZDBigNumber(b).div(2);
+    return halfB.plus(bignumber_1.valueToZDBigNumber(a).multipliedBy(exports.RAY)).div(b.toString());
 }
-export function rayToWad(a) {
-    var halfRatio = valueToZDBigNumber(WAD_RAY_RATIO).div(2);
-    return halfRatio.plus(a.toString()).div(WAD_RAY_RATIO);
+exports.rayDiv = rayDiv;
+function rayToWad(a) {
+    var halfRatio = bignumber_1.valueToZDBigNumber(exports.WAD_RAY_RATIO).div(2);
+    return halfRatio.plus(a.toString()).div(exports.WAD_RAY_RATIO);
 }
-export function wadToRay(a) {
-    return valueToZDBigNumber(a).multipliedBy(WAD_RAY_RATIO).decimalPlaces(0);
+exports.rayToWad = rayToWad;
+function wadToRay(a) {
+    return bignumber_1.valueToZDBigNumber(a).multipliedBy(exports.WAD_RAY_RATIO).decimalPlaces(0);
 }
-export function rayPow(a, p) {
-    var x = valueToZDBigNumber(a);
-    var n = valueToZDBigNumber(p);
-    var z = !n.modulo(2).eq(0) ? x : valueToZDBigNumber(RAY);
+exports.wadToRay = wadToRay;
+function rayPow(a, p) {
+    var x = bignumber_1.valueToZDBigNumber(a);
+    var n = bignumber_1.valueToZDBigNumber(p);
+    var z = !n.modulo(2).eq(0) ? x : bignumber_1.valueToZDBigNumber(exports.RAY);
     for (n = n.div(2); !n.eq(0); n = n.div(2)) {
         x = rayMul(x, x);
         if (!n.modulo(2).eq(0)) {
@@ -37,7 +46,9 @@ export function rayPow(a, p) {
     }
     return z;
 }
-export function rayToDecimal(a) {
-    return valueToZDBigNumber(a).dividedBy(RAY);
+exports.rayPow = rayPow;
+function rayToDecimal(a) {
+    return bignumber_1.valueToZDBigNumber(a).dividedBy(exports.RAY);
 }
+exports.rayToDecimal = rayToDecimal;
 //# sourceMappingURL=ray-math.js.map

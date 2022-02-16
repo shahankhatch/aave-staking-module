@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,83 +35,88 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import BigNumber from 'bignumber.js';
-import low from 'lowdb';
-import FileSync from 'lowdb/adapters/FileSync';
-import { WAD } from './constants';
-import { Wallet } from 'ethers';
-import { eEthereumNetwork } from './types';
-export var toWad = function (value) { return new BigNumber(value).times(WAD).toFixed(); };
-export var stringToBigNumber = function (amount) { return new BigNumber(amount); };
-export var getDb = function () { return low(new FileSync('./deployed-contracts.json')); };
-export var BRE = {};
-export var setBRE = function (_BRE) {
-    BRE = _BRE;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-export var getParamPerNetwork = function (_a, network) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.increaseTimeAndMine = exports.increaseTime = exports.advanceBlock = exports.timeLatest = exports.evmRevert = exports.evmSnapshot = exports.waitForTx = exports.createRandomAddress = exports.sleep = exports.getParamPerNetwork = exports.setBRE = exports.BRE = exports.getDb = exports.stringToBigNumber = exports.toWad = void 0;
+var bignumber_js_1 = __importDefault(require("bignumber.js"));
+var lowdb_1 = __importDefault(require("lowdb"));
+var FileSync_1 = __importDefault(require("lowdb/adapters/FileSync"));
+var constants_1 = require("./constants");
+var ethers_1 = require("ethers");
+var types_1 = require("./types");
+exports.toWad = function (value) { return new bignumber_js_1.default(value).times(constants_1.WAD).toFixed(); };
+exports.stringToBigNumber = function (amount) { return new bignumber_js_1.default(amount); };
+exports.getDb = function () { return lowdb_1.default(new FileSync_1.default('./deployed-contracts.json')); };
+exports.BRE = {};
+exports.setBRE = function (_BRE) {
+    exports.BRE = _BRE;
+};
+exports.getParamPerNetwork = function (_a, network) {
     var kovan = _a.kovan, ropsten = _a.ropsten, main = _a.main, buidlerevm = _a.buidlerevm;
     switch (network) {
-        case eEthereumNetwork.buidlerevm:
+        case types_1.eEthereumNetwork.buidlerevm:
             return buidlerevm;
-        case eEthereumNetwork.kovan:
+        case types_1.eEthereumNetwork.kovan:
             return kovan;
-        case eEthereumNetwork.ropsten:
+        case types_1.eEthereumNetwork.ropsten:
             return ropsten;
-        case eEthereumNetwork.main:
+        case types_1.eEthereumNetwork.main:
             return main;
         default:
             return main;
     }
 };
-export var sleep = function (milliseconds) {
+exports.sleep = function (milliseconds) {
     return new Promise(function (resolve) { return setTimeout(resolve, milliseconds); });
 };
-export var createRandomAddress = function () { return Wallet.createRandom().address; };
-export var waitForTx = function (tx) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+exports.createRandomAddress = function () { return ethers_1.Wallet.createRandom().address; };
+exports.waitForTx = function (tx) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     switch (_a.label) {
         case 0: return [4 /*yield*/, tx.wait()];
         case 1: return [2 /*return*/, _a.sent()];
     }
 }); }); };
-export var evmSnapshot = function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+exports.evmSnapshot = function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     switch (_a.label) {
-        case 0: return [4 /*yield*/, BRE.ethereum.send('evm_snapshot', [])];
+        case 0: return [4 /*yield*/, exports.BRE.ethereum.send('evm_snapshot', [])];
         case 1: return [2 /*return*/, _a.sent()];
     }
 }); }); };
-export var evmRevert = function (id) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/, BRE.ethereum.send('evm_revert', [id])];
+exports.evmRevert = function (id) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+    return [2 /*return*/, exports.BRE.ethereum.send('evm_revert', [id])];
 }); }); };
-export var timeLatest = function () { return __awaiter(void 0, void 0, void 0, function () {
+exports.timeLatest = function () { return __awaiter(void 0, void 0, void 0, function () {
     var block;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, BRE.ethers.provider.getBlock('latest')];
+            case 0: return [4 /*yield*/, exports.BRE.ethers.provider.getBlock('latest')];
             case 1:
                 block = _a.sent();
-                return [2 /*return*/, new BigNumber(block.timestamp)];
+                return [2 /*return*/, new bignumber_js_1.default(block.timestamp)];
         }
     });
 }); };
-export var advanceBlock = function (timestamp) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+exports.advanceBlock = function (timestamp) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     switch (_a.label) {
-        case 0: return [4 /*yield*/, BRE.ethers.provider.send('evm_mine', [timestamp])];
+        case 0: return [4 /*yield*/, exports.BRE.ethers.provider.send('evm_mine', [timestamp])];
         case 1: return [2 /*return*/, _a.sent()];
     }
 }); }); };
-export var increaseTime = function (secondsToIncrease) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+exports.increaseTime = function (secondsToIncrease) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     switch (_a.label) {
-        case 0: return [4 /*yield*/, BRE.ethers.provider.send('evm_increaseTime', [secondsToIncrease])];
+        case 0: return [4 /*yield*/, exports.BRE.ethers.provider.send('evm_increaseTime', [secondsToIncrease])];
         case 1: return [2 /*return*/, _a.sent()];
     }
 }); }); };
-export var increaseTimeAndMine = function (secondsToIncrease) { return __awaiter(void 0, void 0, void 0, function () {
+exports.increaseTimeAndMine = function (secondsToIncrease) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, BRE.ethers.provider.send('evm_increaseTime', [secondsToIncrease])];
+            case 0: return [4 /*yield*/, exports.BRE.ethers.provider.send('evm_increaseTime', [secondsToIncrease])];
             case 1:
                 _a.sent();
-                return [4 /*yield*/, BRE.ethers.provider.send('evm_mine', [])];
+                return [4 /*yield*/, exports.BRE.ethers.provider.send('evm_mine', [])];
             case 2:
                 _a.sent();
                 return [2 /*return*/];

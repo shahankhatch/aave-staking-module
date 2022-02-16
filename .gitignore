@@ -2,3 +2,5 @@ artifacts
 .idea
 cache
 node_modules
+types2
+dist2
