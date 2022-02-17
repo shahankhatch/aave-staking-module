@@ -2,9 +2,12 @@
 
 ## local node at 127.0.0.1:8545
 
-`npx hardhat node`
-`yarn buidler-localhost test`
-`yarn test`
+In 1st terminal window:
+1. `npx hardhat node`
+
+In 2nd terminal window:
+1. `sh ./scripts/build.sh`
+2. `yarn test`
 
 ## internal node
 
